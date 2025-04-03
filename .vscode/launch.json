@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Model training",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/scripts/train.py",
+            "args": [
+                "--dataset", "caltech-256",  // mnist, cifar10, cifar100, caltech-101, caltech-256
+            ],
+        },
+        {
+            "name": "Create recipe and experiment",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "../mdi-cli/src/cli/__main__.py",
+            "args": [
+                "experiment",
+                "create",
+                "classifier",
+                "${workspaceFolder}",
+                "train",
+                "mnist",
+                "SageMakerTest-CPU",
+            ],
+        },
+    ]
+}
