@@ -1,4 +1,3 @@
-from typing import Optional
 import numpy as np  # noqa E402 Set MKL_SERVICE_FORCE_INTEL to force it
 
 import argparse
@@ -23,13 +22,12 @@ def parse_args():
     parser = argparse.ArgumentParser(description="PyTorch Training")
     parser.add_argument("--dataset", type=str, default=3, help="Dataset being used locally")
     parser.add_argument("--epochs", type=int, default=3, help="Number of epochs to train")
-    parser.add_argument(
-        "--learning_rate", type=float, default=0.001, help="Learning rate for optimizer"
-    )
+    parser.add_argument("--learning_rate", type=float, default=0.001, help="Learning rate for optimizer")
     parser.add_argument("--batch_size", type=int, default=128, help="Batch size for training")
     parser.add_argument("--log_interval", type=int, default=5, help="Interval for logging")
     parser.add_argument("--max_steps_per_epoch", type=int, default=20, help="Max steps per epoch")
     return parser.parse_args()
+
 
 def main(args: argparse.Namespace):
     artifacts_dir = Path(ARTIFACT_DIR)
@@ -47,10 +45,10 @@ def main(args: argparse.Namespace):
         dataset = load_dataset(args.dataset)
     else:
         dataset = load_dataset(DATA_DIR)
-    
+
     dataset = flatten_dataset_fields(dataset)
     train_dataloader, test_dataloader = create_dataloaders(dataset, args.batch_size)
-    
+
     class_mapping = dataset["train"].features["classification.class_idx"]
     # class_mapping = dataset["train"].features["label"]
     num_classes = len(class_mapping.names)
@@ -65,7 +63,7 @@ def main(args: argparse.Namespace):
         log_interval=args.log_interval,
         ckpt_dir=ckpt_dir,
         max_steps_per_epoch=args.max_steps_per_epoch,
-        num_classes=num_classes
+        num_classes=num_classes,
     )
     torch.save(model.state_dict(), model_dir / "model.pth")
 

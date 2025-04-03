@@ -1,0 +1,31 @@
+{
+    "[json]": {
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "editor.rulers": [
+      140
+    ],
+    "notebook.formatOnSave.enabled": true,
+    "notebook.codeActionsOnSave": {
+      "notebook.source.fixAll": "explicit",
+      "notebook.source.organizeImports": "explicit"
+    },
+    "[python]": {
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit"
+      },
+      "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "json.format.keepLines": true,
+    "autoDocstring.docstringFormat": "google-notypes",
+    "python.testing.pytestArgs": [
+      "tests",
+      "-vv"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+  }
+  

@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+      "editorconfig.editorconfig",
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "matangover.mypy",
+      "njpwerner.autodocstring",
+      "charliermarsh.ruff",
+      "streetsidesoftware.code-spell-checker",
+    ]
+  }
+  
