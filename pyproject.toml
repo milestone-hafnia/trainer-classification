@@ -6,7 +6,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "dotenv>=0.9.9",
+    "lark>=1.2.2",
     "mdi-python-tools",
+    "pytest>=8.3.5",
     "python-dotenv>=1.1.0",
     "tensorboard>=2.19.0",
     "torch>=2.6.0",

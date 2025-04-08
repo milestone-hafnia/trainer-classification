@@ -10,7 +10,7 @@ load_dotenv()
 
 def parse_args():
     parser = argparse.ArgumentParser(description="PyTorch Training")
-    parser.add_argument("--dataset", type=str, default=3, help="Dataset being used locally")
+    parser.add_argument("--dataset", type=str, default="mnist", help="Dataset being used locally")
     parser.add_argument("--epochs", type=int, default=3, help="Number of epochs to train")
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Learning rate for optimizer")
     parser.add_argument("--resize", type=int, default=None, help="Resize image to specified size")
@@ -69,6 +69,8 @@ def main(args: argparse.Namespace):
         num_classes=num_classes,
     )
     torch.save(model.state_dict(), model_dir / "model.pth")
+
+    return logger
 
 
 if __name__ == "__main__":
