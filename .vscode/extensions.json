@@ -1,9 +1,8 @@
 {
     "recommendations": [
-      "editorconfig.editorconfig",
       "ms-python.python",
       "ms-python.vscode-pylance",
-      "matangover.mypy",
+      "ms-python.mypy-type-checker",
       "njpwerner.autodocstring",
       "charliermarsh.ruff",
       "streetsidesoftware.code-spell-checker",

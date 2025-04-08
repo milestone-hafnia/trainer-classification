@@ -10,24 +10,27 @@ from torchvision.models import resnet18
 from torchvision.transforms import v2
 
 
-def create_transforms() -> v2.Compose:
+def create_transforms(resize: Optional[int] = None) -> v2.Compose:
     """
     Creates a composition of image transformations for data augmentation and normalization.
 
     Returns:
         transforms.Compose: A composed transform for image preprocessing.
     """
-    return v2.Compose(
-        [
-            v2.RandomHorizontalFlip(p=0.5),
-            v2.ToImage(),
-            v2.ToDtype(torch.float32, scale=True),
-            v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
-    )
+    transforms = [
+        v2.RandomHorizontalFlip(p=0.5),
+        v2.ToImage(),
+        v2.ToDtype(torch.float32, scale=True),
+        v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ]
+    if resize is not None:
+        transforms.insert(0, v2.Resize((resize, resize)))
+    return v2.Compose(transforms)
 
 
-def create_dataloaders(dataset: DatasetDict, batch_size: int, num_workers: int = 4) -> Tuple[DataLoader, DataLoader]:
+def create_dataloaders(
+    dataset: DatasetDict, batch_size: int, num_workers: int = 4, resize: Optional[int] = None
+) -> Tuple[DataLoader, DataLoader]:
     """
     Creates training and testing DataLoaders.
 
@@ -39,7 +42,7 @@ def create_dataloaders(dataset: DatasetDict, batch_size: int, num_workers: int =
     Returns:
         Tuple[DataLoader, DataLoader]: Training and testing DataLoaders.
     """
-    transforms = create_transforms()
+    transforms = create_transforms(resize=resize)
     train_split = dataset["train"]
     train_split.set_transform(transforms)
     test_split = dataset["test"]
@@ -122,7 +125,7 @@ def run_train_epoch(
         if i % log_interval == 0:
             avg_loss = epoch_loss / total_samples
             accuracy = metrics.compute().item()
-            ml_logger.log_scalar("loss", avg_loss, model.training, iteration)
+            ml_logger.log_scalar("train/loss", avg_loss, model.training, iteration)
 
         if i >= max_steps_per_epoch:
             print(f"Max steps per train epoch reached: {max_steps_per_epoch}")
@@ -130,7 +133,7 @@ def run_train_epoch(
 
     avg_loss = epoch_loss / total_samples
     accuracy = metrics.compute().item()
-    ml_logger.log_metric(name="accuracy", value=accuracy, is_training=model.training, step=iteration)
+    ml_logger.log_metric(name="train/accuracy", value=accuracy, is_training=model.training, step=iteration)
 
     return {
         "loss": avg_loss,
@@ -183,8 +186,8 @@ def run_eval(
     accuracy = metrics.compute().item()
     step = (epoch + 1) * len(dataloader)
 
-    ml_logger.log_scalar("loss", avg_loss, model.training, step)
-    ml_logger.log_metric("accuracy", accuracy, model.training, step)
+    ml_logger.log_scalar("test/loss", avg_loss, model.training, step)
+    ml_logger.log_metric("test/accuracy", accuracy, model.training, step)
 
     return {
         "loss": avg_loss,

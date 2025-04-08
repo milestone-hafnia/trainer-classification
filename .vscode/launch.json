@@ -17,7 +17,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/src/scripts/train.py",
             "args": [
-                "--dataset", "caltech-256",  // mnist, cifar10, cifar100, caltech-101, caltech-256
+                "--dataset", "mnist",  // mnist, cifar10, cifar100, caltech-101, caltech-256
             ],
         },
         {
