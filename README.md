@@ -2,8 +2,9 @@
 This is an example project for creating a script2model recipe to train an image classification model with 
 HAFNIA training aaS. 
 
-It demonstrates how to 1) write, run and debug a training script on a sample dataset on your own machine and later 2)
-train a model on the full dataset by dispatch the training script as a *recipe* to the cloud.  
+**Supports model training on Image Classification based datasets such as mnist, cifar10, cifar100, caltech-101 and caltech-256**
+
+It demonstrates how to 1) write, run and debug a training script on a sample dataset on your own machine and 2) zip the training script as a *recipe* and 3) launch recipe in cloud on the full dataset.  
 
 We will walk you through the steps now.
 
@@ -13,7 +14,7 @@ The first step is to clone the example recipe (this repo) to your local environm
     cd [SOME_DESIRED_PATH]
     git clone https://github.com/Data-insight-Platform/recipe-classification
 
-## Install Package Manage and Install Virtual Environment
+## Install Package Manager and Install Virtual Environment
 Install the new and amazing 'uv' package manager. 
 Follow the official installation or use below command to install on macOS or Linux.
 
@@ -27,12 +28,12 @@ Go to the cloned repo and install dependencies in a virtual environment using uv
 ## Recommendation: Install and use VS-code as IDE
 You can use any IDE, but for this example we recommend you to install and use vs-code.   
 
-## Get you HAFNIA API KEY
+## Get your HAFNIA API KEY
 The first step is to get your API KEY.  Use this [guide](https://hafnia.readme.io/docs/create-an-api-key) to get it.
 Copy the API Key - you will need the API key in the next step. 
 
 ## Setup your API key
-Alongside other dependencies, you have with 'uv sync' installed our package 'mdi-python-tools'.
+In the virtual python environment (created with 'uv sync'), you have also installed our 'mdi-python-tools' package. 
 The package includes both a Command Line Interface (CLI) and a SDK to interact with our platform.
 
 Configure your machine to access our platform: 
@@ -52,7 +53,7 @@ Well done! Your machine is now connected to the HAFNIA platform.
 This is important to both 1) use the sample dataset and 2) to launch a training script 
 in the HAFNIA cloud on the full dataset.   
 
-## Local Model Training
+## Start Local Model Training
 During the development of a training script, it is important for the developer   
 to easily run, create, debug and modify a training script locally. 
 
@@ -92,7 +93,7 @@ Fill in the following:
 ## Create and Launch Recipe with the CLI 
 If you are often making changes to the recipe, it becomes annoying and error prone to zip and upload a recipe through the portal. 
 
-Instead, we can with a single command, zip training script, libraries and the dockerfile into a recipe file and launch it on the platform. 
+Instead, we can with a single CLI command 1) zip training script, libraries and the dockerfile into a recipe file and 2) launch it on the platform. 
 
     # The command template: 
     mdi experiment create [OPTIONS] NAME SOURCE_DIR EXEC_CMD DATASET_NAME ENV_NAME
@@ -100,7 +101,7 @@ Instead, we can with a single command, zip training script, libraries and the do
     # Example
     mdi experiment create classifier . train mnist "Free Tier"
 
-Additional resources: 
+## Additional resources:
 - Why would I use the sample dataset and not just the whole dataset? 
 Read more on sample datasets [here](https://hafnia.readme.io/docs/sample-data)
 - Want to know more about script2model? Read more [here](https://hafnia.readme.io/docs/using-scripts) 
