@@ -14,18 +14,23 @@ def file_hash(zip_file, name):
 
 
 def compare_zip_files(zip_path1, zip_path2):
+    files_changed = []
     with zipfile.ZipFile(zip_path1, "r") as z1, zipfile.ZipFile(zip_path2, "r") as z2:
         z1_files = sorted(z1.namelist())
         z2_files = sorted(z2.namelist())
 
         if z1_files != z2_files:
-            print("Different file lists.")
+            print("The new recipe contain a different set of files.")
             return False
 
         for name in z1_files:
             if file_hash(z1, name) != file_hash(z2, name):
                 print(f"File content differs: {name}")
-                return False
+                files_changed.append(name)
+
+    if len(files_changed) > 0:
+        print(f"The following files have changed: {files_changed}")
+        return False
 
     return True
 

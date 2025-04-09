@@ -7,7 +7,7 @@ requires-python = ">=3.10"
 dependencies = [
     "dotenv>=0.9.9",
     "lark>=1.2.2",
-    "mdi-python-tools",
+    "mdi-python-tools==0.1.3",
     "pytest>=8.3.5",
     "python-dotenv>=1.1.0",
     "tensorboard>=2.19.0",
@@ -17,10 +17,17 @@ dependencies = [
     "tqdm>=4.67.1",
 ]
 
-[tool.uv.sources]
-mdi-python-tools = { path = "../mdi-cli", editable = true }  # mdi-cli is currently added as a locally cloned repo. It should be added as a package.
+# Add mdi-cli as package: "uv add --default-index https://test.pypi.org/simple/ --index https://pypi.org/simple/ mdi-python-tools==0.1.3"
+# Add local mdi-cli repo as a dependency with editable install "uv add --editable ../mdi-cli"
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
 line-length = 120 # This should match the 'line-length' in 'pyproject.toml'
 lint.select = ["C4", "E", "F","B", "I", "W", "RUF", "Q"]
+
+[[tool.uv.index]]
+url = "https://test.pypi.org/simple/"
+default = true
+
+[[tool.uv.index]]
+url = "https://pypi.org/simple/"

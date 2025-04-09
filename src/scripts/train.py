@@ -29,10 +29,12 @@ def main(args: argparse.Namespace):
     else:
         print("CUDA is not available. Training on CPU.")
     logger = MDILogger()
-    ckpt_dir = logger.path_model_checkpoints()
-    model_dir = logger.path_model()
+    ckpt_dir = logger.path_model_checkpoints()  # Store checkpoints models here to make them available in the UI.
+    model_dir = logger.path_model()  # Store model here to make it available in the UI.
 
-    logger.log_configuration(vars(args))
+    logger.log_configuration(vars(args))  # Log the configuration to the UI
+
+    # Local execution returns the sample dataset. Remote execution returns the whole dataset.
     dataset = logger.load_dataset(args.dataset)
 
     dataset_name = dataset["train"].info.dataset_name
@@ -53,7 +55,6 @@ def main(args: argparse.Namespace):
     )
 
     class_mapping = dataset["train"].features["classification.class_idx"]
-    # class_mapping = dataset["train"].features["label"]
     num_classes = len(class_mapping.names)
     model = create_model(num_classes=num_classes)
     train_loop(
