@@ -16,8 +16,9 @@ COPY src $RECIPE_DIR
 COPY pyproject.toml $RECIPE_DIR
 WORKDIR $RECIPE_DIR
 
-# uv installs python dependencies using 'pyproject.toml' 
-RUN uv sync
+# uv installs python dependencies specified in 'pyproject.toml'
+RUN uv sync --no-cache
 
-# Adds the virtual environment in path to make it system wide 
+# Adds the virtual environment in path to make it "system wide"
+# Commands can be executed with out 'uv run': "uv run mdi profile ls" -> "mdi profile ls"
 ENV PATH="${RECIPE_DIR}/.venv/bin:$PATH"
