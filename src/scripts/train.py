@@ -2,6 +2,7 @@ import argparse
 
 import torch
 from dotenv import load_dotenv
+from mdi_python_tools.data import load_dataset
 from mdi_python_tools.experiment import MDILogger
 from train_utils import create_dataloaders, create_model, flatten_dataset_fields, train_loop
 
@@ -35,7 +36,7 @@ def main(args: argparse.Namespace):
     logger.log_configuration(vars(args))  # Log the configuration to the UI
 
     # Local execution returns the sample dataset. Remote execution returns the whole dataset.
-    dataset = logger.load_dataset(args.dataset)
+    dataset = load_dataset(args.dataset)
 
     dataset_name = dataset["train"].info.dataset_name
     has_variable_image_sizes = dataset_name in ["caltech-101", "caltech-256"]

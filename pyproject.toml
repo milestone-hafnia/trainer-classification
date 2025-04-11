@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "lark>=1.2.2",
-    "mdi-python-tools==0.1.4",
+    "mdi-python-tools==0.1.5",
     "pytest>=8.3.5",
     "python-dotenv>=1.1.0",
     "torch>=2.6.0",
@@ -15,7 +15,7 @@ dependencies = [
     "tqdm>=4.67.1",
 ]
 
-# Add mdi-cli as package: "uv add --default-index https://test.pypi.org/simple/ --index https://pypi.org/simple/ mdi-python-tools==0.1.3"
+# Add mdi-cli as package: "uv add --default-index https://test.pypi.org/simple/ --index https://pypi.org/simple/ mdi-python-tools==0.1.5"
 # Add local mdi-cli repo as a dependency with editable install "uv add --editable ../mdi-cli"
 
 [tool.ruff]
