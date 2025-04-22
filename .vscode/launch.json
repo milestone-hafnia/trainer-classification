@@ -24,7 +24,7 @@
             "name": "Create recipe and experiment (GPU)",
             "type": "debugpy",
             "request": "launch",
-            "program": "../mdi-cli/src/cli/__main__.py",
+            "program": "../hafnia/src/cli/__main__.py",
             "args": [
                 "experiment",
                 "create",
@@ -39,7 +39,7 @@
             "name": "Create recipe and experiment (CPU)",
             "type": "debugpy",
             "request": "launch",
-            "program": "../mdi-cli/src/cli/__main__.py",
+            "program": "../hafnia/src/cli/__main__.py",
             "args": [
                 "experiment",
                 "create",

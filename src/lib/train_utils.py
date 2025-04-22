@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Tuple
 import torch
 import torch.nn as nn
 from datasets import DatasetDict
-from mdi_python_tools.experiment import MDILogger
+from hafnia.experiment import HafniaLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, Metric
 from torchvision.models import resnet18
@@ -78,7 +78,7 @@ def run_train_epoch(
     criterion: nn.Module,
     metrics: Metric,
     device: torch.device,
-    ml_logger: MDILogger,
+    ml_logger: HafniaLogger,
     log_interval: int,
     max_steps_per_epoch: int,
 ) -> Dict[str, float]:
@@ -93,7 +93,7 @@ def run_train_epoch(
         criterion (nn.Module): Loss function.
         metrics (Metric): Metrics calculator.
         device (torch.device): Computation device.
-        ml_logger (MDILogger): Logger for metrics.
+        ml_logger (HafniaLogger): Logger for metrics.
         log_interval (int): Interval for logging.
         max_steps_per_epoch (int): Maximum steps per epoch.
 
@@ -149,7 +149,7 @@ def run_eval(
     criterion: nn.Module,
     metrics: Metric,
     device: torch.device,
-    ml_logger: MDILogger,
+    ml_logger: HafniaLogger,
 ):
     """
     Runs evaluation on the test dataset.
@@ -161,7 +161,7 @@ def run_eval(
         criterion (nn.Module): Loss function.
         metrics (Metric): Metrics calculator.
         device (torch.device): Computation device.
-        ml_logger (MDILogger): Logger for metrics.
+        ml_logger (HafniaLogger): Logger for metrics.
 
     Returns:
         Dict[str, float]: Dictionary containing average loss and accuracy.
@@ -196,7 +196,7 @@ def run_eval(
 
 
 def train_loop(
-    logger: MDILogger,
+    logger: HafniaLogger,
     train_dataloader: DataLoader,
     test_dataloader: DataLoader,
     model: nn.Module,
@@ -211,7 +211,7 @@ def train_loop(
     Main training loop.
 
     Args:
-        logger (MDILogger): Logger for metrics.
+        logger (HafniaLogger): Logger for metrics.
         train_dataloader (DataLoader): Training DataLoader.
         test_dataloader (DataLoader): Testing DataLoader.
         model (nn.Module): The model to train.

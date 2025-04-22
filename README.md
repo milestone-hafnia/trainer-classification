@@ -27,7 +27,7 @@ Go to the cloned repo and install dependencies in a virtual environment using uv
     uv sync
 
 The command `uv sync` installs python dependencies - including the HAFNIA package
-called `mdi-python-tools`, which we will use later. 
+called `hafnia`, which we will use later. 
 
 
 ## Recommendation: Install and use VS Code as IDE
@@ -44,29 +44,29 @@ The first step is to get your API key. Use this [guide](https://hafnia.readme.io
 Copy the API Key - you will need the API key in the next step. 
 
 ## Setup your API key
-In the virtual python environment (created with 'uv sync'), you have also installed our 'mdi-python-tools' package. 
+In the virtual python environment (created with 'uv sync'), you have also installed our 'hafnia' package. 
 The package includes both a Command Line Interface (CLI) and a SDK to interact with our platform.
 
 Configure your machine to access our platform: 
 
     # Start configuration with
-    mdi configure
+    hafnia configure
 
     # Or in case you are outside the virtual environment run:  
-    uv run mdi configure
+    uv run hafnia configure
 
     # You are then prompted the following questions. 
     Profile Name [default]:   # Press [Enter] or select an optional name
-    MDI API Key:  # Pass your HAFNIA API key
-    MDI Platform URL [https://api.mdi.milestonesys.com]:  # Press [Enter]
+    Hafnia API Key:  # Pass your HAFNIA API key
+    Hafnia Platform URL [https://api.mdi.milestonesys.com]:  # Press [Enter]
 
 Well done! Your machine is now connected to the HAFNIA platform.
 This is important to both 1) use the sample dataset and 2) to launch a training script 
 in the HAFNIA cloud on the full dataset.   
 
-## Recipe: Code Structure and MDILogger
+## Recipe: Code Structure and HafniaLogger
 Before we run an actual training, we should briefly have a look at the recipe code structure and 
-the MDILogger.
+the HafniaLogger.
 
 ### Recipe: Code Structure
 This project folder contains many files, but only below files are needed in our recipe: 
@@ -92,8 +92,8 @@ When a script is being initialized you should do the following:
         batch_size = 128
         learning_rate = 0.001
 
-        # Initialize the MDI logger
-        logger = MDILogger()
+        # Initialize the Hafnia logger
+        logger = HafniaLogger()
 
         # Store checkpoints in this path
         ckpt_dir = logger.path_model_checkpoints()
@@ -165,10 +165,11 @@ If you are often making changes to the recipe, it becomes annoying and error pro
 Instead, we can use a single CLI command to 1) zip training script, libraries and the dockerfile into a recipe file and 2) launch it on the platform. 
 
     # The command template: 
-    mdi experiment create [OPTIONS] NAME SOURCE_DIR EXEC_CMD DATASET_NAME ENV_NAME
+    hafnia experiment create [OPTIONS] NAME SOURCE_DIR EXEC_CMD DATASET_NAME ENV_NAME
 
     # Example
-    mdi experiment create classifier . train mnist "Free Tier"
+    hafnia experiment create classifier . train mnist "Free Tier"
+    hafnia experiment create classifier . train mnist "Professional"
 
 ## Model training
 After a recipe has been started, you can go to [training experiments](https://hafnia.milestonesys.com/training-aas/experiments) on the platform. 

@@ -2,8 +2,8 @@ import argparse
 
 import torch
 from dotenv import load_dotenv
-from mdi_python_tools.data import load_dataset
-from mdi_python_tools.experiment import MDILogger
+from hafnia.data import load_dataset
+from hafnia.experiment import HafniaLogger
 from train_utils import create_dataloaders, create_model, flatten_dataset_fields, train_loop
 
 load_dotenv()
@@ -29,7 +29,7 @@ def main(args: argparse.Namespace):
         print("CUDA is available. Training on GPU.")
     else:
         print("CUDA is not available. Training on CPU.")
-    logger = MDILogger()
+    logger = HafniaLogger()
     ckpt_dir = logger.path_model_checkpoints()  # Store checkpoints models here to make them available in the UI.
     model_dir = logger.path_model()  # Store model here to make it available in the UI.
 

@@ -20,5 +20,5 @@ WORKDIR $RECIPE_DIR
 RUN uv sync --no-cache
 
 # Adds the virtual environment in path to make it "system wide"
-# Commands can be executed with out 'uv run': "uv run mdi profile ls" -> "mdi profile ls"
+# Commands can be executed with out 'uv run': "uv run hafnia profile ls" -> "hafnia profile ls"
 ENV PATH="${RECIPE_DIR}/.venv/bin:$PATH"

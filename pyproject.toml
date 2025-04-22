@@ -5,8 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "hafnia==0.1.9",
     "lark>=1.2.2",
-    "mdi-python-tools==0.1.5",
     "pytest>=8.3.5",
     "python-dotenv>=1.1.0",
     "torch>=2.6.0",
@@ -15,17 +15,10 @@ dependencies = [
     "tqdm>=4.67.1",
 ]
 
-# Add mdi-cli as package: "uv add --default-index https://test.pypi.org/simple/ --index https://pypi.org/simple/ mdi-python-tools==0.1.5"
-# Add local mdi-cli repo as a dependency with editable install "uv add --editable ../mdi-cli"
+# Add 'hafnia' as package: "uv add hafnia==0.1.9"
+# Add local 'hafnia' repo as a dependency with editable install "uv add --editable ../hafnia"
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
 line-length = 120 # This should match the 'line-length' in 'pyproject.toml'
 lint.select = ["C4", "E", "F","B", "I", "W", "RUF", "Q"]
-
-[[tool.uv.index]]
-url = "https://pypi.org/simple/"
-
-[[tool.uv.index]]
-url = "https://test.pypi.org/simple/"
-default = true

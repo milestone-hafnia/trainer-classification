@@ -3,8 +3,8 @@ import shutil
 import zipfile
 from pathlib import Path
 
-from mdi_python_tools import utils
-from mdi_python_tools.platform.builder import validate_recipe
+from hafnia import utils
+from hafnia.platform.builder import validate_recipe
 
 
 def file_hash(zip_file, name):
