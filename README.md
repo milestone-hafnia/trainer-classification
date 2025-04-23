@@ -88,6 +88,7 @@ To use a training script in a recipe you will need to add a few lines
 
 When a script is being initialized you should do the following:
 
+    from hafnia.experiment import HafniaLogger
     def main():
         batch_size = 128
         learning_rate = 0.001
