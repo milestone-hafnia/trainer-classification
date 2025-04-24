@@ -4,7 +4,7 @@ import torch
 from dotenv import load_dotenv
 from hafnia.data import load_dataset
 from hafnia.experiment import HafniaLogger
-from train_utils import create_dataloaders, create_model, flatten_dataset_fields, train_loop
+from train_utils import create_dataloaders, create_model, train_loop
 
 load_dotenv()
 
@@ -38,6 +38,7 @@ def main(args: argparse.Namespace):
     # Local execution returns the sample dataset. Remote execution returns the whole dataset.
     dataset = load_dataset(args.dataset)
 
+    class_mapping = dataset["train"].features["classification"]["class_idx"]
     dataset_name = dataset["train"].info.dataset_name
     has_variable_image_sizes = dataset_name in ["caltech-101", "caltech-256"]
     resize_shape = args.resize
@@ -50,12 +51,10 @@ def main(args: argparse.Namespace):
             "You can override resize shape with the '--resize X' argument."
         )
 
-    dataset = flatten_dataset_fields(dataset)
     train_dataloader, test_dataloader = create_dataloaders(
         dataset=dataset, batch_size=args.batch_size, resize=resize_shape
     )
 
-    class_mapping = dataset["train"].features["classification.class_idx"]
     num_classes = len(class_mapping.names)
     model = create_model(num_classes=num_classes)
     train_loop(

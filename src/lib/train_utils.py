@@ -3,6 +3,7 @@ from typing import Dict, List, Optional, Tuple
 import torch
 import torch.nn as nn
 from datasets import DatasetDict
+from hafnia import torch_helpers
 from hafnia.experiment import HafniaLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, Metric
@@ -43,14 +44,27 @@ def create_dataloaders(
         Tuple[DataLoader, DataLoader]: Training and testing DataLoaders.
     """
     transforms = create_transforms(resize=resize)
+
     train_split = dataset["train"]
-    train_split.set_transform(transforms)
     test_split = dataset["test"]
-    test_split.set_transform(transforms)
 
-    train_loader = DataLoader(train_split, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-    test_loader = DataLoader(test_split, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    # Strictly using our helper functions is not necessary for an Image classification dataset.
+    # It is enough to simply do:
+    #   train_split.set_transform(transforms)
+    #   test_split.set_transform(transforms)
+    #   collate_fn = None
+    # However, we use helpers here for demonstrational purposes as it will work across datasets with
+    # different tasks such as object detection, segmentation, etc.
+    train_split = torch_helpers.TorchvisionDataset(train_split, transforms=transforms, keep_metadata=True)
+    test_split = torch_helpers.TorchvisionDataset(test_split, transforms=transforms, keep_metadata=True)
+    collate_fn = torch_helpers.TorchVisionCollateFn(skip_stacking=["objects.bbox", "objects.class_idx"])
 
+    train_loader = DataLoader(
+        train_split, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=collate_fn
+    )
+    test_loader = DataLoader(
+        test_split, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=collate_fn
+    )
     return train_loader, test_loader
 
 
@@ -108,7 +122,8 @@ def run_train_epoch(
     iteration = epoch * len(dataloader)
 
     for i, batch in enumerate(dataloader):
-        inputs, targets = batch["image"], batch["classification.class_idx"]  # batch["label"]
+        inputs, targets_and_metadata = batch
+        targets = targets_and_metadata["classification.class_idx"]
         inputs, targets = inputs.to(device), targets.to(device)
 
         optimizer.zero_grad()
@@ -172,7 +187,8 @@ def run_eval(
     total_samples = 0
 
     for batch in dataloader:
-        inputs, targets = batch["image"], batch["classification.class_idx"]  # batch["label"]
+        inputs, targets_and_metadata = batch
+        targets = targets_and_metadata["classification.class_idx"]
         inputs, targets = inputs.to(device), targets.to(device)
 
         outputs = model(inputs)
