@@ -1,14 +1,15 @@
 # Recipe: Train Image Classification Model
-This project shows how a *recipe* can be developed and used for model training with HAFNIA's Training as a Service (Training aaS). 
+This project shows how a training *recipe* can be developed and used for model training with HAFNIA's 
+Training as a Service (Training aaS). 
 
 This particular recipe defines training of an image classification model that works on the following datasets: 
 mnist, cifar10, cifar100, caltech-101 and caltech-256.
 
 It demonstrates how to:
-1) Do local development of the training script. Allowing you to write, run and debug a training script 
+1) locally develop a training script, where you will be able to write, run and debug a training script 
 on a sample dataset on your own machine.
-2) Zip the training script into a training recipe 
-3) Launch training recipe with Training-aaS on the full dataset.
+2) zip the training script into a training recipe 
+3) launch training recipe with Training-aaS on the full dataset.
 
 We will walk you through the steps.
 
@@ -33,7 +34,6 @@ Go to the cloned repo and install dependencies in a virtual environment using uv
 
 The command `uv sync` installs python dependencies - including the HAFNIA package
 called `hafnia`, which we will use later. 
-
 
 ### Recommendation: Install and use VS Code as IDE
 You can use any IDE, but for this example we recommend VS Code. 
@@ -68,7 +68,7 @@ Configure your machine to access the training service:
     Hafnia API Key:  # Pass your HAFNIA API key
     Hafnia Platform URL [https://api.mdi.milestonesys.com]:  # Press [Enter]
 
-Well done! Your machine is now has access to training-aaS.
+Well done! Your machine is now connected to Training-aaS.
 This is important to both 1) use the sample dataset and 2) to launch a training script 
 in the HAFNIA cloud on the full dataset.   
 
@@ -81,47 +81,52 @@ The recipe code should follow below structure.
 
 ```
     ├── src
-    │   ├── scripts
-    │   │   └── train.py
-    │   └── lib
-    │       └── utils.py
+    │   ├── scripts/
+    │   └── lib/
     ├── Dockerfile
     └── pyproject.toml
 ```
 - `src/scripts/*`: Folder with the actual training script. 
   Commonly, it will just be a single script called `train.py`, but you may introduce multiple scripts. 
 - `src/lib/*` (Optional): Folder for all your python helper functions and/or other dependencies used by your 
-  training script. In theory, all your code could be in `train.py`, but for most projects, the training code will be arranged in multiple files. 
+  training script. In theory, all your code could be in `train.py`, but for most projects, the training code will be 
+  arranged in multiple files. 
 - `Dockerfile`: This dockerfile defines the environment where your script will be executed in the training service. 
-- `pyproject.toml` (Optional): File with dependencies. In this example, we are using a `pyproject.toml` file for the `uv` package manager. 
-  This could also be a `requirements.txt` file for pip or a `environment.yml` file for conda-based environments. 
-  A requirement file is not strictly needed for a recipe. However, it can be referenced in both 
-  the docker container and in your local virtual environment, to ensure you have consistent dependencies
-  locally and in the training service. 
+- `pyproject.toml` (Optional): File with dependencies. In this example, we are using a `pyproject.toml` file for 
+  the `uv` package manager. This could also be a `requirements.txt` file for pip or a `environment.yml` file 
+  for conda-based environments. A requirement file is not strictly needed for a recipe. However, it can 
+  be referenced in both the docker container and in your local virtual environment, to ensure you have 
+  consistent dependencies locally and in the training service. 
 
 #### Recipe: HafniaLogger
-The `HafniaLogger` is used for experiment tracking and is responsible for logging configuration, training and evaluation metrics and model artifacts. 
+The `HafniaLogger` is used for experiment tracking and is responsible for logging configuration, training and 
+evaluation metrics and model artifacts. 
 
-Check out `train.py` to see how it is initialized and the `run_train_epoch` and `run_eval` function in `train_utils.py` to see how it is used during training and evaluation.  
+Check out `train.py` to see how it is initialized and the `run_train_epoch` and `run_eval` function in 
+`train_utils.py` to see how it is used during training and evaluation.  
 
 More details can be found [here](https://github.com/milestone-hafnia/hafnia?tab=readme-ov-file#getting-started-experiment-tracking-with-hafnialogger). 
 
 
 After above setup, it is seamless to switch between local development and launching recipes to Training-aaS. 
 
-For local development, you can follow the  can flow for executing, creating, debugging and modifying a training script 
-follow a common developer workflow.
+For local development, you will be executing, creating, debugging and modifying your training script 
+following a common developer workflow.
 
 You can either do debugging in VS Code or run the script from the terminal.
 
 ### Run the script in VS Code
-If you want to debug the script with VS Code, click the `Run and Debug` tab in the left panel, select `Model Training` launcher 
-and press F5. Launch configurations are defined in `.vscode/launch.json`.
+If you want to debug the script with VS Code, click the `Run and Debug` tab in the left panel, 
+select `Model Training` launcher and press F5. 
+Launch configurations are defined in `.vscode/launch.json`.
 
 ### Run the script in the terminal
 If you want to run the script in the terminal, you can use the following command.
 
-     python src/scripts/train.py --dataset mnist 
+    python src/scripts/train.py --dataset mnist 
+
+    # Or if you are outside the virtual environment of vs-code
+    uv run src/scripts/train.py --dataset mnist
 
 ### Experiment data
 After running an experiment, you should now have a folder called `.data` in the workspace root containing the
@@ -132,10 +137,13 @@ following:
 ## 2. Create a Recipe
 With a working training script, you are now ready to create a recipe.
 
-We have created a CLI command to help you out. You will need to run this command in the root folder of the repo.
+We have created a CLI command to help you out. Run below command in the root folder of this repo.
 
-  cd recipe-classification
-  hafnia experiment create_recipe
+    cd recipe-classification
+    hafnia experiment create_recipe
+
+    # Or if you are outside the virtual environment in vs-code
+    uv run hafnia experiment create_recipe
 
 This command will automatically gather files and create a  training recipe called `recipe.zip`
 in the root folder of the repo.
@@ -145,16 +153,20 @@ With a training recipe, you can now launch a training job in the HAFNIA cloud
 using either the portal or the CLI. We will go through both options.
 
 ### 3a. Launching a Recipe through the web portal
-The easiest way to launch a recipe is to open 
+To launch a recipe, open 
 the [experiments dashboard](https://hafnia.milestonesys.com/training-aas/experiments) and press the 
 "New Experiment" button. 
 
 This will open up a new window for configuring your experiment. 
 Fill in the following: 
-- **Select Recipe**: In the top left corner, press `Browse files` and select the `recipe.zip` file located in the root folder of this repo. In subsequent runs, the drop down can be used to select previously used recipes. 
+- **Select Recipe**: In the top left corner, press `Browse files` and select the `recipe.zip` file located in the root 
+folder of this repo. In subsequent runs, the drop down can be used to select previously used recipes. 
 - **Experiment name**: Provide some desired name. Anything works.
-- **Command**: Add `train` to point to the training script in `src/scripts/train.py`. You may also add additional commands supported in `src/scripts/train.py` script, e.g. the following command `train --batch_size 256 --learning_rate 0.00001` 
-- **Select dataset**: For this recipe, you can select any Image Classification dataset such as mnist, cifar10, cifar100, caltech-101 and caltech-256. 
+- **Command**: Add `train` to point to the training script in `src/scripts/train.py`. 
+You may also add additional commands supported in `src/scripts/train.py` script, 
+e.g. the following command `train --batch_size 256 --learning_rate 0.00001` 
+- **Select dataset**: For this recipe, you can select any Image Classification dataset 
+such as mnist, cifar10, cifar100, caltech-101 and caltech-256. 
 - **Training Configuration**: Select either "Free Tier" or "Professional" as training instance.
 
 
@@ -174,19 +186,22 @@ zip and upload the recipe to the Training-aaS platform.
     hafnia experiment create classifier . train mnist "Free Tier"
     hafnia experiment create classifier . train mnist "Professional"
 
-This command will create a recipe called `classifier`, using the current working directory, 
-`train` will points to `train.py`, it will the `mnist` dataset  and the model is trained on
-either a "Free Tier" or "Professional" instance.  
+*IMPORTANT NOTE: We have found that above command is currently not working. We have identified the issue and are working on a fix. For now, you will need to use the web-based user interface to upload recipes, but try again next week.*
+
+This command will create a recipe called `classifier` using the current working directory `.`.  
+The `train` command points to the `scripts/train.py` script. The model is then trained on the `mnist` dataset 
+using either a "Free Tier" or "Professional" instance.
 
 After execution, the recipe will be available in `.data/recipes` and the 
 launch experiment can be followed [training experiments](https://hafnia.milestonesys.com/training-aas/experiments) 
 on the platform. 
 
-## Experiments
+## Monitor Experiments
 To follow the status of experiments go to [training experiments](https://hafnia.milestonesys.com/training-aas/experiments) 
 on the platform. Here you can view status, logs and the option to download the trained model for all your experiments.
 
 **Next steps:**
-- Run multiple trainings using different hyperparameters or other image classification datasets available in the [data library](https://hafnia.milestonesys.com/training-aas/datasets)
-- Build or modify your custom training script to run with Training-aaS.
+- Run multiple trainings using different hyperparameters or other image classification datasets available in 
+the [data library](https://hafnia.milestonesys.com/training-aas/datasets)
+- Modify this template or build or your custom training script from scratch to run it with Training-aaS.
 

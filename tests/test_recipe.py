@@ -48,6 +48,8 @@ def test_recipe_outdated(tmp_path: Path):
         assert 0 == 1, "Recipe file not found. Recipe file have been regenerated. Please run the test again."
 
     assert_msg = (
-        "Recipe file contents differ. Please check the differences. Delete the recipe.zip file to regenerate it."
+        "Recipe file contents differ. Please check the differences. "
+        f"Delete the '{path_recipe_expected}' file to regenerate it or "
+        "run 'hafnia experiment create_recipe' in terminal to update the recipe."
     )
     assert compare_zip_files(path_recipe_actual, path_recipe_expected), assert_msg

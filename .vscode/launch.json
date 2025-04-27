@@ -28,27 +28,12 @@
             "args": [
                 "experiment",
                 "create",
-                "classifier-GPU",
-                "${workspaceFolder}",
-                "train",
-                "mnist",
-                "Professional",
-            ],
-        },
-        {
-            "name": "Create recipe and experiment (CPU)",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "../hafnia/src/cli/__main__.py",
-            "args": [
-                "experiment",
-                "create",
-                "classifier-CPU",
+                "classifier_free_tier",
                 "${workspaceFolder}",
                 "train",
                 "mnist",
                 "Free Tier",
             ],
-        },
+        }
     ]
 }
