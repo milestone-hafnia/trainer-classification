@@ -448,7 +448,7 @@ http = [
 
 [[package]]
 name = "hafnia"
-version = "0.1.19"
+version = "0.1.23"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
@@ -461,9 +461,9 @@ dependencies = [
     { name = "rich" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/16/13/7fac4cc7f62012dcb67ac6a40cb84106b63f2f8074e881c6a49da13bc1ad/hafnia-0.1.19.tar.gz", hash = "sha256:437b2d887698a57001f3a7916945966243ddfdfdcd79b76495210e35268af411", size = 158407 }
+sdist = { url = "https://files.pythonhosted.org/packages/9e/ce/bb99f0a6bc9de5cee6143f65037294d038676e10fb6b1f2d1ad21e0ea2f1/hafnia-0.1.23.tar.gz", hash = "sha256:8b925b3b7c34c70ae624e57726d9ea858619126a434eb65e63b12b9428c128e5", size = 166281 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/88/1c/525eb278163d98919766ecb29531c62fa9003142eaee65ed552d756a3be7/hafnia-0.1.19-py3-none-any.whl", hash = "sha256:9374dba658d8f6fd75a48826ac5b002c38b9c38e5071eaae737549c7076d76b8", size = 28461 },
+    { url = "https://files.pythonhosted.org/packages/cf/02/143a51970a4a93910b8d8b1e9df30bb90c38adac9635f0717f80f1cd2c37/hafnia-0.1.23-py3-none-any.whl", hash = "sha256:535ff5c5f38103bc84276222a8ff32c27e87fd412111f5812ceac2956a821390", size = 28461 },
 ]
 
 [[package]]
@@ -1397,15 +1397,6 @@ wheels = [
 ]
 
 [[package]]
-name = "python-dotenv"
-version = "1.1.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/88/2c/7bb1416c5620485aa793f2de31d3df393d3686aa8a8506d11e10e13c5baf/python_dotenv-1.1.0.tar.gz", hash = "sha256:41f90bc6f5f177fb41f53e87666db362025010eb28f60a01c9143bfa33a2b2d5", size = 39920 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/18/98a99ad95133c6a6e2005fe89faedf294a748bd5dc803008059409ac9b1e/python_dotenv-1.1.0-py3-none-any.whl", hash = "sha256:d7c01d9e2293916c18baf562d95698754b0dbbb5e74d457c45d4f6561fb9d55d", size = 20256 },
-]
-
-[[package]]
 name = "pytz"
 version = "2025.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1467,7 +1458,6 @@ dependencies = [
     { name = "lark" },
     { name = "pre-commit" },
     { name = "pytest" },
-    { name = "python-dotenv" },
     { name = "torch" },
     { name = "torchmetrics" },
     { name = "torchvision" },
@@ -1476,11 +1466,10 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "hafnia", specifier = "==0.1.19" },
+    { name = "hafnia", specifier = "==0.1.23" },
     { name = "lark", specifier = ">=1.2.2" },
     { name = "pre-commit", specifier = ">=4.2.0" },
     { name = "pytest", specifier = ">=8.3.5" },
-    { name = "python-dotenv", specifier = ">=1.1.0" },
     { name = "torch", specifier = ">=2.6.0" },
     { name = "torchmetrics", specifier = ">=1.7.0" },
     { name = "torchvision", specifier = ">=0.21.0" },

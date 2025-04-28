@@ -1,12 +1,9 @@
 import argparse
 
 import torch
-from dotenv import load_dotenv
 from hafnia.data import load_dataset
 from hafnia.experiment import HafniaLogger
 from train_utils import create_dataloaders, create_model, train_loop
-
-load_dotenv()
 
 
 def parse_args():
