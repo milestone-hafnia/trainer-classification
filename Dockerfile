@@ -14,10 +14,11 @@ ENV PATH="/root/.local/bin/:$PATH"
 ENV RECIPE_DIR=/opt/recipe
 COPY src $RECIPE_DIR
 COPY pyproject.toml $RECIPE_DIR
+COPY uv.lock $RECIPE_DIR
 WORKDIR $RECIPE_DIR
 
 # uv installs python dependencies specified in 'pyproject.toml'
-RUN uv sync --no-cache
+RUN uv sync --no-cache --locked
 
 # Adds the virtual environment in path to make it "system wide"
 # Commands can be executed with out 'uv run': "uv run hafnia profile ls" -> "hafnia profile ls"

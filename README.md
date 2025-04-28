@@ -123,7 +123,7 @@ Launch configurations are defined in `.vscode/launch.json`.
 ### Run the script in the terminal
 If you want to run the script in the terminal, you can use the following command.
 
-    python src/scripts/train.py --dataset mnist 
+    python src/scripts/train.py --dataset mnist
 
     # Or if you are outside the virtual environment of vs-code
     uv run src/scripts/train.py --dataset mnist
@@ -186,8 +186,6 @@ zip and upload the recipe to the Training-aaS platform.
     hafnia experiment create classifier . train mnist "Free Tier"
     hafnia experiment create classifier . train mnist "Professional"
 
-*IMPORTANT NOTE: We have found that above command is currently not working. We have identified the issue and are working on a fix. For now, you will need to use the web-based user interface to upload recipes, but try again next week.*
-
 This command will create a recipe called `classifier` using the current working directory `.`.  
 The `train` command points to the `scripts/train.py` script. The model is then trained on the `mnist` dataset 
 using either a "Free Tier" or "Professional" instance.
@@ -199,6 +197,21 @@ on the platform.
 ## Monitor Experiments
 To follow the status of experiments go to [training experiments](https://hafnia.milestonesys.com/training-aas/experiments) 
 on the platform. Here you can view status, logs and the option to download the trained model for all your experiments.
+
+
+## Managing your Python Environment
+This project is using `uv` to manage python dependencies in the `pyproject.toml`/`uv.lock` file to ensure that 
+the dependencies are consistent for both the local and the Training-aaS environment.
+
+To ensure that dependencies are consistent for the two environments, you should 
+use `uv` based commands to manage dependencies.
+
+    # Install a new dependency
+    uv add <package_name>
+
+    # Remove a dependency
+    uv remove <package_name>
+
 
 **Next steps:**
 - Run multiple trainings using different hyperparameters or other image classification datasets available in 

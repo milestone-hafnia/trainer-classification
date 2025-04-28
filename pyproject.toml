@@ -5,11 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "hafnia==0.1.17",
+    "hafnia==0.1.19",
     "lark>=1.2.2",
+    "pre-commit>=4.2.0",
     "pytest>=8.3.5",
     "python-dotenv>=1.1.0",
-    "requests-toolbelt>=1.0.0",
     "torch>=2.6.0",
     "torchmetrics>=1.7.0",
     "torchvision>=0.21.0",
