@@ -13,10 +13,8 @@ ENV PATH="/root/.local/bin/:$PATH"
 # Copy recipe files in the docker image
 ENV RECIPE_DIR=/opt/recipe
 WORKDIR $RECIPE_DIR
-COPY src $RECIPE_DIR
-COPY scripts $RECIPE_DIR
-COPY pyproject.toml $RECIPE_DIR
-COPY uv.lock $RECIPE_DIR
+
+COPY . $RECIPE_DIR
 
 # uv installs python dependencies specified in 'pyproject.toml'
 RUN uv sync --no-cache --locked
