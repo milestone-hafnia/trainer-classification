@@ -3,7 +3,7 @@ import argparse
 import torch
 from hafnia.data import load_dataset
 from hafnia.experiment import HafniaLogger
-from train_utils import create_dataloaders, create_model, train_loop
+from recipe_classification.train_utils import create_dataloaders, create_model, train_loop
 
 
 def parse_args():
