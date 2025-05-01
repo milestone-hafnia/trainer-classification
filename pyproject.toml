@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "hafnia==0.1.23",
+    "hafnia",
     "lark>=1.2.2",
     "pre-commit>=4.2.0",
     "pytest>=8.3.5",
@@ -23,3 +23,5 @@ extend-include = ["*.ipynb"]
 line-length = 120 # This should match the 'line-length' in 'pyproject.toml'
 lint.select = ["C4", "E", "F","B", "I", "W", "RUF", "Q"]
 
+[tool.uv.sources]
+hafnia = { git = "https://github.com/milestone-hafnia/hafnia.git", branch = "main" }
