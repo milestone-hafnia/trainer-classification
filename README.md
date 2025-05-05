@@ -141,10 +141,10 @@ With a working training script, you are now ready to create a recipe.
 We have created a CLI command to help you out. Run below command in the root folder of this repo.
 
     cd recipe-classification
-    hafnia experiment create_recipe
+    hafnia recipe create <PATH_TO_FOLDER>
 
     # Or if you are outside the virtual environment in vs-code
-    uv run hafnia experiment create_recipe
+    uv run hafnia recipe create <PATH_TO_FOLDER>
 
 This command will automatically gather files and create a  training recipe called `recipe.zip`
 in the root folder of the repo.
