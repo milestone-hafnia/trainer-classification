@@ -124,10 +124,10 @@ Launch configurations are defined in `.vscode/launch.json`.
 ### Run the script in the terminal
 If you want to run the script in the terminal, you can use the following command.
 
-    python src/scripts/train.py --dataset mnist
+    python scripts/train.py --dataset mnist
 
     # Or if you are outside the virtual environment of vs-code
-    PYTHONPATH=src/lib uv run src/scripts/train.py --dataset mnist
+    PYTHONPATH=src uv run scripts/train.py --dataset mnist
 
 ### Experiment data
 After running an experiment, you should now have a folder called `.data` in the workspace root containing the
