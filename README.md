@@ -21,7 +21,7 @@ The first step is to clone the repo to your local environment:
     cd [SOME_DESIRED_PATH]
     git clone https://github.com/Data-insight-Platform/recipe-classification
 
-### Install Package Manager and Install Virtual Environment
+### Create Virtual Environment and Install Hafnia Package
 Install the new and amazing 'uv' package manager. 
 Follow the official installation or use below command to install on macOS or Linux.
 
@@ -84,15 +84,21 @@ The recipe code should follow below structure.
     │   └── recipe_classification/
     ├── scripts/
     ├── Dockerfile
+    ├── .hafniaignore
     ├── pyproject.toml
     └── uv.lock
 ```
-- `src/scripts/*`: Folder with the actual training script. 
+- `scripts/*`: Folder with the actual training script. 
   Commonly, it will just be a single script called `train.py`, but you may introduce multiple scripts. 
-- `src/recipe_classification/*` (Optional): Folder for all your python helper functions and/or other dependencies used by your 
-  training script. In theory, all your code could be in `train.py`, but for most projects, the training code will be 
-  arranged in multiple files. 
+- `src/recipe_classification/*` (Optional): Folder for all your python helper functions and/or other dependencies used 
+  by your training script. In theory, all your code could be in `train.py`, but for most projects, the training code 
+  will be arranged in multiple files. 
 - `Dockerfile`: This dockerfile defines the environment where your script will be executed in the training service. 
+- `.hafniaignore` (Optional): File for specifying files and folders that are not included in the `recipe.zip` file using same syntax as a `.gitignore` file.  
+In the next section, we will cover how the `recipe.zip` file is created. 
+  If you don't provide a `.hafniaignore` file, it will revert to sensible defaults.
+  If you want to exclude more or less files, you will need to create a `.hafniaignore` file.
+  
 - `pyproject.toml` (Optional): File with dependencies. In this example, we are using a `pyproject.toml` file for 
   the `uv` package manager. This could also be a `requirements.txt` file for pip or a `environment.yml` file 
   for conda-based environments. A requirement file is not strictly needed for a recipe. However, it can 
@@ -124,10 +130,10 @@ Launch configurations are defined in `.vscode/launch.json`.
 ### Run the script in the terminal
 If you want to run the script in the terminal, you can use the following command.
 
-    python src/scripts/train.py --dataset mnist
+    python scripts/train.py --dataset mnist
 
     # Or if you are outside the virtual environment of vs-code
-    PYTHONPATH=src/lib uv run src/scripts/train.py --dataset mnist
+    PYTHONPATH=src uv run scripts/train.py --dataset mnist
 
 ### Experiment data
 After running an experiment, you should now have a folder called `.data` in the workspace root containing the
@@ -141,10 +147,10 @@ With a working training script, you are now ready to create a recipe.
 We have created a CLI command to help you out. Run below command in the root folder of this repo.
 
     cd recipe-classification
-    hafnia experiment create_recipe
+    hafnia recipe create .
 
     # Or if you are outside the virtual environment in vs-code
-    uv run hafnia experiment create_recipe
+    uv run hafnia recipe create .
 
 This command will automatically gather files and create a  training recipe called `recipe.zip`
 in the root folder of the repo.
@@ -167,7 +173,7 @@ folder of this repo. In subsequent runs, the drop down can be used to select pre
 You may also add additional commands supported in `src/scripts/train.py` script, 
 e.g. the following command `train --batch_size 256 --learning_rate 0.00001` 
 - **Select dataset**: For this recipe, you can select any Image Classification dataset 
-such as mnist, cifar10, cifar100, caltech-101 and caltech-256. 
+such as mnist, caltech-101 and caltech-256. 
 - **Training Configuration**: Select either "Free Tier" or "Professional" as training instance.
 
 
@@ -182,7 +188,6 @@ zip and upload the recipe to the Training-aaS platform.
     hafnia experiment create [OPTIONS] NAME SOURCE_DIR EXEC_CMD DATASET_NAME ENV_NAME
 
     # Example
-
     cd recipe-classification
     hafnia experiment create classifier . train mnist "Free Tier"
     hafnia experiment create classifier . train mnist "Professional"
@@ -213,6 +218,19 @@ use `uv` based commands to manage dependencies.
     # Remove a dependency
     uv remove <package_name>
 
+## Testing `recipe.zip` Locally
+To iterate faster and debug the `recipe.zip` more easily, you can build and run `recipe.zip` locally. 
+
+```bash
+    # Create 'recipe.zip'
+    hafnia recipe create .
+    
+    # Build the docker image locally from the 'recipe.zip'
+    hafnia runc build-local recipe.zip
+
+    # Execute the docker image locally (Coming soon)
+
+```
 
 **Next steps:**
 - Run multiple trainings using different hyperparameters or other image classification datasets available in 

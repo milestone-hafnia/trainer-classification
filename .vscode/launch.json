@@ -15,7 +15,7 @@
             "name": "Model training",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/src/scripts/train.py",
+            "program": "${workspaceFolder}/scripts/train.py",
             "args": [
                 "--dataset", "mnist",  // mnist, cifar10, cifar100, caltech-101, caltech-256
             ],

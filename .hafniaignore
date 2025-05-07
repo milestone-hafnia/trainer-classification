@@ -1,0 +1,20 @@
+
+*_cache/
+
+.data
+.git
+.venv
+.vscode
+
+*.jpg
+*.png
+*.py[cod]
+
+__pycache__
+dist/
+tests/
+
+# Hafnia files
+recipe.zip
+README.md
+state.json

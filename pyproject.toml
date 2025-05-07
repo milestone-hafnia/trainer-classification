@@ -14,9 +14,10 @@ dependencies = [
     "torchvision>=0.21.0",
     "tqdm>=4.67.1",
 ]
-
-# Add 'hafnia' as package: "uv add hafnia==0.1.16"
-# Add local 'hafnia' repo as a dependency with editable install "uv add --editable ../hafnia"
+# Adding hafnia:
+# - As a package with "uv add hafnia==0.1.16"
+# - As a local editable install "uv add --editable ../hafnia"
+# - As a package from git - in this example the main branch: "uv add git+https://github.com/milestone-hafnia/hafnia.git@main"
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
@@ -24,4 +25,4 @@ line-length = 120 # This should match the 'line-length' in 'pyproject.toml'
 lint.select = ["C4", "E", "F","B", "I", "W", "RUF", "Q"]
 
 [tool.uv.sources]
-hafnia = { git = "https://github.com/milestone-hafnia/hafnia.git", branch = "main" }
+hafnia = { git = "https://github.com/milestone-hafnia/hafnia.git", rev = "main" }
