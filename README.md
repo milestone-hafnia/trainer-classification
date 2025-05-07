@@ -218,18 +218,19 @@ use `uv` based commands to manage dependencies.
     # Remove a dependency
     uv remove <package_name>
 
-## Testing `recipe.zip` Locally
-To iterate faster and debug the `recipe.zip` more easily, you can build and run `recipe.zip` locally. 
+## Create, Build and Run `recipe.zip` locally
+In order to test recipe compatibility with Hafnia cloud use the following command to build and 
+start the job locally
 
 ```bash
-    # Create 'recipe.zip'
+    # Create 'recipe.zip' from source folder
     hafnia recipe create .
     
-    # Build the docker image locally from the 'recipe.zip'
+    # Build the docker image locally from a 'recipe.zip' file
     hafnia runc build-local recipe.zip
 
-    # Execute the docker image locally (Coming soon)
-
+    # Execute the docker image locally with a desired dataset
+    hafnia runc launch-local --dataset mnist  "python scripts/train.py"
 ```
 
 **Next steps:**
