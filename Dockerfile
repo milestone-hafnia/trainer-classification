@@ -14,10 +14,14 @@ ENV PATH="/root/.local/bin/:$PATH"
 ENV RECIPE_DIR=/opt/recipe
 WORKDIR $RECIPE_DIR
 
-COPY . $RECIPE_DIR
+# Copy only dependency files first for caching
+COPY pyproject.toml uv.lock ./
 
-# uv installs python dependencies specified in 'pyproject.toml'
+# Install dependencies (cached if deps didn't change)
 RUN uv sync --no-cache --locked
+
+# Now copy the rest of the recipe (source) files
+COPY . .
 
 # Adds the virtual environment in path to make it "system wide"
 # Commands can be executed with out 'uv run': "uv run hafnia profile ls" -> "hafnia profile ls"
