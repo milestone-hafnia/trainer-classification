@@ -4,7 +4,7 @@ import zipfile
 from pathlib import Path
 
 from hafnia import utils
-from hafnia.platform.builder import validate_recipe
+from hafnia.platform.builder import validate_recipe_format
 
 
 def file_hash(zip_file, name):
@@ -41,7 +41,7 @@ def test_recipe_outdated(tmp_path: Path):
     path_recipe_expected = Path(__file__).parents[1] / "recipe.zip"
     path_source = Path("./.")
     utils.archive_dir(path_source, output_path=path_recipe_actual)
-    validate_recipe(path_recipe_actual)
+    validate_recipe_format(path_recipe_actual)
 
     if not path_recipe_expected.exists():
         shutil.copy2(path_recipe_actual, path_recipe_expected)
