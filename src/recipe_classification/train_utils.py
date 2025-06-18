@@ -13,7 +13,7 @@ from torchvision.transforms import v2
 
 def create_transforms(resize: Optional[int] = None) -> v2.Compose:
     """
-    Creates a composition of image transformations for data augmentation and normalization.
+    Creates a composition of image transformations for data augmentation and normalization
 
     Returns:
         transforms.Compose: A composed transform for image preprocessing.
