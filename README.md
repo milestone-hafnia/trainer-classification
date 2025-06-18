@@ -169,9 +169,8 @@ Fill in the following:
 - **Select Recipe**: In the top left corner, press `Browse files` and select the `recipe.zip` file located in the root 
 folder of this repo. In subsequent runs, the drop down can be used to select previously used recipes. 
 - **Experiment name**: Provide some desired name. Anything works.
-- **Command**: Add `train` to point to the training script in `src/scripts/train.py`. 
-You may also add additional commands supported in `src/scripts/train.py` script, 
-e.g. the following command `train --batch_size 256 --learning_rate 0.00001` 
+- **Command**: Add your training command. For this example it would be `python scripts/train.py` or 
+optionally provide script arguments e.g. `scripts/train.py --batch_size 256 --learning_rate 0.00001`. 
 - **Select dataset**: For this recipe, you can select any Image Classification dataset 
 such as mnist, caltech-101 and caltech-256. 
 - **Training Configuration**: Select either "Free Tier" or "Professional" as training instance.
@@ -189,11 +188,11 @@ zip and upload the recipe to the Training-aaS platform.
 
     # Example
     cd recipe-classification
-    hafnia experiment create classifier . train mnist "Free Tier"
-    hafnia experiment create classifier . train mnist "Professional"
+    hafnia experiment create classifier . "python scripts/train.py" mnist "Free Tier"
+    hafnia experiment create classifier . "python scripts/train.py" mnist "Professional"
 
 This command will create a recipe called `classifier` using the current working directory `.`.  
-The `train` command points to the `scripts/train.py` script. The model is then trained on the `mnist` dataset 
+The training command is `python scripts/train.py`. The model is then trained on the `mnist` dataset 
 using either a "Free Tier" or "Professional" instance.
 
 After execution, the recipe will be available in `.data/recipes` and the 
