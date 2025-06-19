@@ -28,7 +28,13 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "cSpell.words": [
-      "HAFNIA"
+      "cifar",
+      "HAFNIA",
+      "hafniaignore",
+      "mnist",
+      "pyproject",
+      "PYTHONPATH",
+      "venv"
     ],
   }
   
