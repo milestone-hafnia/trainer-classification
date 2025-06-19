@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 from datasets import DatasetDict
 from hafnia import torch_helpers
+from hafnia.dataset.hafnia_dataset import HafniaDataset
 from hafnia.experiment import HafniaLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, Metric
@@ -30,7 +31,7 @@ def create_transforms(resize: Optional[int] = None) -> v2.Compose:
 
 
 def create_dataloaders(
-    dataset: DatasetDict, batch_size: int, num_workers: int = 4, resize: Optional[int] = None
+    dataset: HafniaDataset, batch_size: int, num_workers: int = 4, resize: Optional[int] = None
 ) -> Tuple[DataLoader, DataLoader]:
     """
     Creates training and testing DataLoaders.
@@ -45,8 +46,8 @@ def create_dataloaders(
     """
     transforms = create_transforms(resize=resize)
 
-    train_split = dataset["train"]
-    test_split = dataset["test"]
+    train_split = dataset.create_split_dataset("train")
+    test_split = dataset.create_split_dataset("test")
 
     # Strictly using our helper functions is not necessary for an Image classification dataset.
     # It is enough to simply do:
@@ -57,7 +58,7 @@ def create_dataloaders(
     # different tasks such as object detection, segmentation, etc.
     train_split = torch_helpers.TorchvisionDataset(train_split, transforms=transforms, keep_metadata=True)
     test_split = torch_helpers.TorchvisionDataset(test_split, transforms=transforms, keep_metadata=True)
-    collate_fn = torch_helpers.TorchVisionCollateFn(skip_stacking=["objects.bbox", "objects.class_idx"])
+    collate_fn = torch_helpers.TorchVisionCollateFn()
 
     train_loader = DataLoader(
         train_split, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=collate_fn
@@ -123,7 +124,7 @@ def run_train_epoch(
 
     for i, batch in enumerate(dataloader):
         inputs, targets_and_metadata = batch
-        targets = targets_and_metadata["classification.class_idx"]
+        targets = targets_and_metadata["classifications.classification.class_idx"]
         inputs, targets = inputs.to(device), targets.to(device)
 
         optimizer.zero_grad()
@@ -188,7 +189,7 @@ def run_eval(
 
     for batch in dataloader:
         inputs, targets_and_metadata = batch
-        targets = targets_and_metadata["classification.class_idx"]
+        targets = targets_and_metadata["classifications.classification.class_idx"]
         inputs, targets = inputs.to(device), targets.to(device)
 
         outputs = model(inputs)

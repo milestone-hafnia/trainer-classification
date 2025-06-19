@@ -3,6 +3,7 @@ import argparse
 import torch
 from hafnia.data import load_dataset
 from hafnia.experiment import HafniaLogger
+
 from recipe_classification.train_utils import create_dataloaders, create_model, train_loop
 
 
@@ -13,6 +14,7 @@ def parse_args():
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Learning rate for optimizer")
     parser.add_argument("--resize", type=int, default=None, help="Resize image to specified size")
     parser.add_argument("--batch_size", type=int, default=128, help="Batch size for training")
+    parser.add_argument("--num_workers", type=int, default=8, help="Number of workers for DataLoader")
     parser.add_argument("--log_interval", type=int, default=5, help="Interval for logging")
     parser.add_argument("--max_steps_per_epoch", type=int, default=20, help="Max steps per epoch")
 
@@ -35,8 +37,8 @@ def main(args: argparse.Namespace):
     # Local execution returns the sample dataset. Remote execution returns the whole dataset.
     dataset = load_dataset(args.dataset)
 
-    class_mapping = dataset["train"].features["classification"]["class_idx"]
-    dataset_name = dataset["train"].info.dataset_name
+    classification_task = dataset.info.tasks[0]
+    dataset_name = dataset.info.dataset_name
     has_variable_image_sizes = dataset_name in ["caltech-101", "caltech-256"]
     resize_shape = args.resize
     if has_variable_image_sizes and resize_shape is None:
@@ -49,10 +51,13 @@ def main(args: argparse.Namespace):
         )
 
     train_dataloader, test_dataloader = create_dataloaders(
-        dataset=dataset, batch_size=args.batch_size, resize=resize_shape
+        dataset=dataset,
+        batch_size=args.batch_size,
+        resize=resize_shape,
+        num_workers=args.num_workers,
     )
 
-    num_classes = len(class_mapping.names)
+    num_classes = len(classification_task.class_names)
     model = create_model(num_classes=num_classes)
     train_loop(
         logger=logger,
