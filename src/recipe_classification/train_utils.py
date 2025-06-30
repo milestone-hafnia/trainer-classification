@@ -1,8 +1,7 @@
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
-from datasets import DatasetDict
 from hafnia import torch_helpers
 from hafnia.dataset.hafnia_dataset import HafniaDataset
 from hafnia.experiment import HafniaLogger
@@ -96,7 +95,7 @@ def run_train_epoch(
     ml_logger: HafniaLogger,
     log_interval: int,
     max_steps_per_epoch: int,
-) -> Dict[str, float]:
+) -> Dict[str, Union[float, int]]:
     """
     Runs one epoch of training.
 
@@ -120,7 +119,7 @@ def run_train_epoch(
     epoch_loss = 0.0
     total_samples = 0
 
-    iteration = epoch * len(dataloader)
+    step = epoch * len(dataloader)
 
     for i, batch in enumerate(dataloader):
         inputs, targets_and_metadata = batch
@@ -136,30 +135,31 @@ def run_train_epoch(
         epoch_loss += loss.item() * inputs.size(0)
         total_samples += inputs.size(0)
         metrics.update(outputs.softmax(dim=1), targets)
-        iteration += i
 
         if i % log_interval == 0:
             avg_loss = epoch_loss / total_samples
             accuracy = metrics.compute().item()
-            ml_logger.log_scalar("train/loss", avg_loss, step=iteration)
+            ml_logger.log_scalar("train/loss", avg_loss, step=step)
 
+        step += 1
         if i >= max_steps_per_epoch:
             print(f"Max steps per train epoch reached: {max_steps_per_epoch}")
             break
 
     avg_loss = epoch_loss / total_samples
     accuracy = metrics.compute().item()
-    ml_logger.log_metric(name="train/accuracy", value=accuracy, step=iteration)
+    ml_logger.log_metric(name="train/accuracy", value=accuracy, step=step)
 
     return {
         "loss": avg_loss,
         "accuracy": accuracy,
+        "step": step,
     }
 
 
 @torch.no_grad()
 def run_eval(
-    epoch: int,
+    step: int,
     dataloader: DataLoader,
     model: nn.Module,
     criterion: nn.Module,
@@ -201,7 +201,6 @@ def run_eval(
 
     avg_loss = epoch_loss / total_samples
     accuracy = metrics.compute().item()
-    step = (epoch + 1) * len(dataloader)
 
     ml_logger.log_scalar("test/loss", avg_loss, step)
     ml_logger.log_metric("test/accuracy", accuracy, step)
@@ -247,7 +246,7 @@ def train_loop(
     metrics = Accuracy(task="multiclass", num_classes=num_classes).to(device)
 
     for epoch in range(epochs):
-        run_train_epoch(
+        results = run_train_epoch(
             epoch,
             train_dataloader,
             model,
@@ -260,28 +259,6 @@ def train_loop(
             log_interval,
             max_steps_per_epoch,
         )
-        eval_metrics = run_eval(epoch, test_dataloader, model, criterion, metrics, device, logger)
+        eval_metrics = run_eval(results["step"], test_dataloader, model, criterion, metrics, device, logger)
         ckpt_fname = f"accuracy_{eval_metrics['accuracy']:.2f}_epoch_{epoch}.pth"
         torch.save(model.state_dict(), f"{ckpt_dir}/{ckpt_fname}")
-
-
-def flatten_dataset_fields(dataset: DatasetDict, drop_columns: Optional[List[str]] = None) -> DatasetDict:
-    """
-    Flatten nested dataset fields and potentially remove specified columns.
-    Only for convenience to flatten nested dataset fields.
-
-    For a given sample in the dataset (sample = dataset["train"][0])
-
-    You will be able to do:
-    >> label = sample["classification.class_idx"]
-
-    Instead of:
-    >> label = sample["classification"]["class_idx"]
-
-    """
-    drop_columns = drop_columns or []
-    for split_name, split in dataset.items():
-        flattened_split = split.flatten()
-        drop_columns_filtered = [col_name for col_name in drop_columns if col_name in flattened_split.features]
-        dataset[split_name] = flattened_split.remove_columns(drop_columns_filtered)
-    return dataset
