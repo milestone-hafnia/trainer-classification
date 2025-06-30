@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "hafnia",
+    "hafnia==0.2.0",
     "lark>=1.2.2",
     "pre-commit>=4.2.0",
     "pytest>=8.3.5",
@@ -15,7 +15,7 @@ dependencies = [
     "tqdm>=4.67.1",
 ]
 # Adding hafnia:
-# - As a package with "uv add hafnia==0.1.16"
+# - As a package with "uv add hafnia==0.2.00"
 # - As a local editable install "uv add --editable ../hafnia"
 # - As a package from git - in this example the main branch: "uv add git+https://github.com/milestone-hafnia/hafnia.git@main"
 
@@ -24,6 +24,3 @@ dependencies = [
 extend-include = ["*.ipynb"]
 line-length = 120 # This should match the 'line-length' in 'pyproject.toml'
 lint.select = ["C4", "E", "F","B", "I", "W", "RUF", "Q"]
-
-[tool.uv.sources]
-hafnia = { git = "https://github.com/milestone-hafnia/hafnia.git", rev = "hafnia-dataset" }
