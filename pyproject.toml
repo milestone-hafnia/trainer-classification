@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "hafnia==0.2.2",
+    "hafnia==0.2.3",
     "lark>=1.2.2",
     "pre-commit>=4.2.0",
     "pytest>=8.3.5",
@@ -15,7 +15,7 @@ dependencies = [
     "tqdm>=4.67.1",
 ]
 # Adding hafnia:
-# - As a package with "uv add hafnia==0.2.00"
+# - As a package with "uv add hafnia==0.2.3"
 # - As a local editable install "uv add --editable ../hafnia"
 # - As a package from git - in this example the main branch: "uv add git+https://github.com/milestone-hafnia/hafnia.git@main"
 
