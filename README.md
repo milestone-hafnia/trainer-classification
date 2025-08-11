@@ -32,6 +32,8 @@ Go to the cloned repo and install dependencies in a virtual environment using uv
     cd recipe-classification
     uv sync
 
+    uv pip install -e .
+
 The command `uv sync` installs python dependencies - including the HAFNIA package
 called `hafnia`, which we will use later. 
 
