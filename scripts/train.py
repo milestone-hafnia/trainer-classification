@@ -71,6 +71,8 @@ def main(args: argparse.Namespace):
         max_steps_per_epoch=args.max_steps_per_epoch,
         num_classes=num_classes,
     )
+
+    # Important: Save model in 'model_dir' to make it available in the hafnia platform
     torch.save(model.state_dict(), model_dir / "model.pth")
 
     return logger

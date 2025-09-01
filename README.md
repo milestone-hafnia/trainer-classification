@@ -144,9 +144,15 @@ following:
 - `.data/experiments`: This folder contains experiments. For each run, an experiment folder is created for storing model, checkpoints and artifacts for a given run. 
 
 ## 2. Create a Recipe
-With a working training script, you are now ready to create a recipe.
+With a working training script, you are now ready to create a recipe. 
+The recipe is essentially a zip file containing all the necessary files to reproduce your experiment
+in the Training-as-a-Service (TaaS) platform.
 
-We have created a CLI command to help you out. Run below command in the root folder of this repo.
+We recommend using the CLI command `hafnia recipe create` to ensure that files are correctly 
+included - and that unnecessary files are excluded. Note also the `.hafniaignore` file, that
+defines which files are excluded from the recipe.
+
+Run below command in the root folder of this repo.
 
     cd recipe-classification
     hafnia recipe create .
@@ -154,8 +160,9 @@ We have created a CLI command to help you out. Run below command in the root fol
     # Or if you are outside the virtual environment in vs-code
     uv run hafnia recipe create .
 
-This command will automatically gather files and create a  training recipe called `recipe.zip`
-in the root folder of the repo.
+This command will automatically gather files and create a training recipe called `recipe.zip`
+in the root folder of the repo. 
+
 
 ## 3. Launch Training-aaS for Model Training
 With a training recipe, you can now launch a training job in the HAFNIA cloud
@@ -175,7 +182,9 @@ folder of this repo. In subsequent runs, the drop down can be used to select pre
 optionally provide script arguments e.g. `scripts/train.py --batch_size 256 --learning_rate 0.00001`. 
 - **Select dataset**: For this recipe, you can select any Image Classification dataset 
 such as mnist, caltech-101 and caltech-256. 
-- **Training Configuration**: Select either "Free Tier" or "Professional" as training instance.
+- **Training Configuration**: Select your desired training configuration
+    - "Free Tier": To use a "Nvidia T4" instance with 16 GB GPU Memory
+    - "Professional": To use an instance with four "Nvidia V100" GPUs with a total of 64 GB GPU Memory. **Note** that GPU memory is distributed across multiple GPUs (16 GB per GPU). To utilize all memory, you will need to adapt your script to support multi-GPU training.
 
 
 ### 3b. Create and Launch Recipe with the CLI 
