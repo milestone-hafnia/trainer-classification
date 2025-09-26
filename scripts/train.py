@@ -1,10 +1,11 @@
 import argparse
 
 import torch
-from hafnia.data import load_dataset
+from hafnia import utils
+from hafnia.dataset.hafnia_dataset import HafniaDataset
 from hafnia.experiment import HafniaLogger
 
-from recipe_classification.train_utils import create_dataloaders, create_model, train_loop
+from trainer_classification.train_utils import create_dataloaders, create_model, train_loop
 
 
 def parse_args():
@@ -34,8 +35,13 @@ def main(args: argparse.Namespace):
 
     logger.log_configuration(vars(args))  # Log the configuration to the UI
 
-    # Local execution returns the sample dataset. Remote execution returns the whole dataset.
-    dataset = load_dataset(args.dataset)
+    if utils.is_hafnia_cloud_job():  # In hafnia cloud, the path to the full/hidden dataset is returned
+        path_dataset = utils.get_dataset_path_in_hafnia_cloud()
+        dataset = HafniaDataset.from_path(path_dataset)
+    elif args.dataset:  # For local execution, a public/sample dataset is returned by name
+        dataset = HafniaDataset.from_name(args.dataset)
+    else:
+        raise ValueError("You must provide a dataset name with the '--dataset DATASET_NAME' argument")
 
     classification_task = dataset.info.tasks[0]
     dataset_name = dataset.info.dataset_name

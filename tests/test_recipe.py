@@ -4,7 +4,7 @@ import zipfile
 from pathlib import Path
 
 from hafnia import utils
-from hafnia.platform.builder import validate_recipe_format
+from hafnia.platform.builder import validate_trainer_package_format
 
 
 def file_hash(zip_file, name):
@@ -20,7 +20,7 @@ def compare_zip_files(zip_path1, zip_path2):
         z2_files = sorted(z2.namelist())
 
         if z1_files != z2_files:
-            print("The new recipe contain a different set of files.")
+            print("The new trainer package contain new files")
             return False
 
         for name in z1_files:
@@ -35,21 +35,21 @@ def compare_zip_files(zip_path1, zip_path2):
     return True
 
 
-def test_recipe_outdated(tmp_path: Path):
-    """Test the recipe generation and validation."""
-    path_recipe_actual = tmp_path / "recipe.zip"
-    path_recipe_expected = Path(__file__).parents[1] / "recipe.zip"
+def test_trainer_zip_outdated(tmp_path: Path):
+    """Test the trainer package generation and validation."""
+    path_trainer_zip_actual = tmp_path / "trainer.zip"
+    path_trainer_zip_expected = Path(__file__).parents[1] / "trainer.zip"
     path_source = Path("./.")
-    utils.archive_dir(path_source, output_path=path_recipe_actual)
-    validate_recipe_format(path_recipe_actual)
+    utils.archive_dir(path_source, output_path=path_trainer_zip_actual)
+    validate_trainer_package_format(path_trainer_zip_actual)
 
-    if not path_recipe_expected.exists():
-        shutil.copy2(path_recipe_actual, path_recipe_expected)
-        assert 0 == 1, "Recipe file not found. Recipe file have been regenerated. Please run the test again."
+    if not path_trainer_zip_expected.exists():
+        shutil.copy2(path_trainer_zip_actual, path_trainer_zip_expected)
+        assert 0 == 1, "Trainer package zip file not found. Package have been regenerated. Please run the test again."
 
     assert_msg = (
-        "Recipe file contents differ. Please check the differences. "
-        f"Delete the '{path_recipe_expected}' file to regenerate it or "
-        "run 'hafnia experiment create_recipe' in terminal to update the recipe."
+        "Trainer package contents differ. Please check the differences. "
+        f"Delete the '{path_trainer_zip_expected}' file to regenerate it or "
+        "run 'hafnia trainer create-zip .' in terminal to update the recipe."
     )
-    assert compare_zip_files(path_recipe_actual, path_recipe_expected), assert_msg
+    assert compare_zip_files(path_trainer_zip_actual, path_trainer_zip_expected), assert_msg

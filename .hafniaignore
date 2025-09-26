@@ -10,11 +10,13 @@
 *.png
 *.py[cod]
 
+**.egg-info/
+
 __pycache__
 dist/
 tests/
 
 # Hafnia files
-recipe.zip
+trainer.zip
 README.md
 state.json

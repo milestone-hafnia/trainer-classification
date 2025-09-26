@@ -22,17 +22,23 @@
             ],
         },
         {
-            "name": "Create recipe and experiment (GPU)",
+            "name": "Create trainer package and experiment (GPU)",
             "type": "debugpy",
             "request": "launch",
             "program": "../hafnia/src/cli/__main__.py",
+            // hafnia experiment create --dataset mnist --name classifier --trainer-path . --cmd "python scripts/train.py" --environment "Free Tier"
             "args": [
                 "experiment",
                 "create",
-                "classifier_free_tier",
-                "${workspaceFolder}",
-                "train",
+                "--dataset",
                 "mnist",
+                "--name",
+                "classifier",
+                "--trainer-path",
+                "${workspaceFolder}",
+                "--cmd",
+                "python scripts/train.py",
+                "--environment",
                 "Free Tier",
             ],
         }
