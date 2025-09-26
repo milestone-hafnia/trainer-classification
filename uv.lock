@@ -929,8 +929,8 @@ wheels = [
 
 [[package]]
 name = "hafnia"
-version = "0.2.4"
-source = { git = "https://github.com/milestone-hafnia/hafnia.git?rev=main#c5b6553a73e64dec0009087892a03be9edbc4c70" }
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
     { name = "click" },
@@ -951,6 +951,10 @@ dependencies = [
     { name = "seedir" },
     { name = "tqdm" },
     { name = "xxhash" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2d/49/eb1daf6747fef4cc1b1255dd208a0f72c051f62a7ff0f146c29dddeee4ce/hafnia-0.3.0.tar.gz", hash = "sha256:0612fd8bc2676c1c3ffd6b353e00a42f9503c5a38f668d6033bdf201776cbafc", size = 6869597, upload-time = "2025-09-26T09:53:08.032Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0a/4b/ef1434bde930a65f9071688c1e0fe4141e51a0284705d4545fe6f08929c0/hafnia-0.3.0-py3-none-any.whl", hash = "sha256:6e54d6b0a6c54ea27a859ceb7b849db7f55eac9d65b8f33005bcb6e3e5357ec2", size = 95002, upload-time = "2025-09-26T09:53:06.952Z" },
 ]
 
 [[package]]
@@ -3291,7 +3295,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "hafnia", git = "https://github.com/milestone-hafnia/hafnia.git?rev=main" },
+    { name = "hafnia", specifier = "==0.3.0" },
     { name = "lark", specifier = ">=1.2.2" },
     { name = "pre-commit", specifier = ">=4.2.0" },
     { name = "pytest", specifier = ">=8.3.5" },
