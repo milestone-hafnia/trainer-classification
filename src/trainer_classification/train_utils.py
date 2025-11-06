@@ -162,6 +162,7 @@ def run_train_epoch(
 @torch.no_grad()
 def run_eval(
     step: int,
+    classification_task: TaskInfo,
     dataloader: DataLoader,
     model: nn.Module,
     criterion: nn.Module,
@@ -173,7 +174,8 @@ def run_eval(
     Runs evaluation on the test dataset.
 
     Args:
-        epoch (int): Current epoch number.
+        step (int): Current step number.
+        classification_task: TaskInfo,
         dataloader (DataLoader): Evaluation DataLoader.
         model (nn.Module): The model to evaluate.
         criterion (nn.Module): Loss function.
@@ -188,10 +190,10 @@ def run_eval(
     metrics.reset()
     epoch_loss = 0.0
     total_samples = 0
-
+    class_idx_name = f"{classification_task.primitive.column_name()}.{classification_task.name}.class_idx"
     for batch in dataloader:
         inputs, targets_and_metadata = batch
-        targets = targets_and_metadata["classifications.classification.class_idx"]
+        targets = targets_and_metadata[class_idx_name]
         inputs, targets = inputs.to(device), targets.to(device)
 
         outputs = model(inputs)
@@ -266,6 +268,7 @@ def train_loop(
         )
         eval_metrics = run_eval(
             step=results["step"],
+            classification_task=classification_task,
             dataloader=test_dataloader,
             model=model,
             criterion=criterion,
