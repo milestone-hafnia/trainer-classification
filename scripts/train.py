@@ -2,7 +2,9 @@ import argparse
 
 import torch
 from hafnia import utils
+from hafnia.dataset.dataset_names import SampleField
 from hafnia.dataset.hafnia_dataset import HafniaDataset
+from hafnia.dataset.primitives import Classification
 from hafnia.experiment import HafniaLogger
 
 from trainer_classification.train_utils import create_dataloaders, create_model, train_loop
@@ -43,7 +45,7 @@ def main(args: argparse.Namespace):
     else:
         raise ValueError("You must provide a dataset name with the '--dataset DATASET_NAME' argument")
 
-    classification_task = dataset.info.tasks[0]
+    classification_task = dataset.info.get_task_by_primitive(Classification)
     dataset_name = dataset.info.dataset_name
     has_variable_image_sizes = dataset_name in ["caltech-101", "caltech-256"]
     resize_shape = args.resize
@@ -67,6 +69,7 @@ def main(args: argparse.Namespace):
     model = create_model(num_classes=num_classes)
     train_loop(
         logger=logger,
+        classification_task=classification_task,
         train_dataloader=train_dataloader,
         test_dataloader=test_dataloader,
         model=model,

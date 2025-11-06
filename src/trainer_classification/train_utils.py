@@ -3,7 +3,7 @@ from typing import Dict, Optional, Tuple, Union
 import torch
 import torch.nn as nn
 from hafnia import torch_helpers
-from hafnia.dataset.hafnia_dataset import HafniaDataset
+from hafnia.dataset.hafnia_dataset import HafniaDataset, TaskInfo
 from hafnia.experiment import HafniaLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, Metric
@@ -85,6 +85,7 @@ def create_model(num_classes: int) -> nn.Module:
 
 def run_train_epoch(
     epoch: int,
+    classification_task: TaskInfo,
     dataloader: DataLoader,
     model: nn.Module,
     optimizer: torch.optim.Optimizer,
@@ -121,9 +122,10 @@ def run_train_epoch(
 
     step = epoch * len(dataloader)
 
+    class_idx_name = f"{classification_task.primitive.column_name()}.{classification_task.name}.class_idx"
     for i, batch in enumerate(dataloader):
         inputs, targets_and_metadata = batch
-        targets = targets_and_metadata["classifications.classification.class_idx"]
+        targets = targets_and_metadata[class_idx_name]
         inputs, targets = inputs.to(device), targets.to(device)
 
         optimizer.zero_grad()
@@ -213,6 +215,7 @@ def run_eval(
 
 def train_loop(
     logger: HafniaLogger,
+    classification_task: TaskInfo,
     train_dataloader: DataLoader,
     test_dataloader: DataLoader,
     model: nn.Module,
@@ -228,6 +231,7 @@ def train_loop(
 
     Args:
         logger (HafniaLogger): Logger for metrics.
+        classification_task (TaskInfo): Information about the classification task.
         train_dataloader (DataLoader): Training DataLoader.
         test_dataloader (DataLoader): Testing DataLoader.
         model (nn.Module): The model to train.
@@ -247,18 +251,27 @@ def train_loop(
 
     for epoch in range(epochs):
         results = run_train_epoch(
-            epoch,
-            train_dataloader,
-            model,
-            optimizer,
-            scheduler,
-            criterion,
-            metrics,
-            device,
-            logger,
-            log_interval,
-            max_steps_per_epoch,
+            epoch=epoch,
+            classification_task=classification_task,
+            dataloader=train_dataloader,
+            model=model,
+            optimizer=optimizer,
+            scheduler=scheduler,
+            criterion=criterion,
+            metrics=metrics,
+            device=device,
+            ml_logger=logger,
+            log_interval=log_interval,
+            max_steps_per_epoch=max_steps_per_epoch,
         )
-        eval_metrics = run_eval(results["step"], test_dataloader, model, criterion, metrics, device, logger)
+        eval_metrics = run_eval(
+            step=results["step"],
+            dataloader=test_dataloader,
+            model=model,
+            criterion=criterion,
+            metrics=metrics,
+            device=device,
+            ml_logger=logger,
+        )
         ckpt_fname = f"accuracy_{eval_metrics['accuracy']:.2f}_epoch_{epoch}.pth"
         torch.save(model.state_dict(), f"{ckpt_dir}/{ckpt_fname}")

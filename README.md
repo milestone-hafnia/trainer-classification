@@ -200,10 +200,10 @@ zip and upload the trainer package to the Training-aaS platform.
 
     # Example
     cd trainer-classification
-    hafnia experiment create --dataset mnist
+    hafnia experiment create --dataset mnist --trainer-path . 
 
     # Showing default options
-    hafnia experiment create --dataset mnist --name classifier --trainer-path . --cmd "python scripts/train.py" --environment "Free Tier"
+    hafnia experiment create --dataset mnist --trainer-path . --cmd "python scripts/train.py" --environment "Free Tier"
 
 This command will create a trainer called `classifier` using the current working directory `.`.  
 The training command is `python scripts/train.py`. The model is then trained on the `mnist` dataset 

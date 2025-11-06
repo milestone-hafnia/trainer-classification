@@ -15,7 +15,7 @@ ENV TRAINER_PACKAGE_DIR=/opt/recipe
 WORKDIR $TRAINER_PACKAGE_DIR
 
 # Copy only dependency files first for caching
-COPY pyproject.toml uv.lock ./
+COPY pyproject.toml uv.lock .python-version ./
 
 # Install dependencies (cached if deps didn't change)
 RUN uv sync --no-cache --locked
