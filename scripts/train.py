@@ -2,7 +2,6 @@ import argparse
 
 import torch
 from hafnia import utils
-from hafnia.dataset.dataset_names import SampleField
 from hafnia.dataset.hafnia_dataset import HafniaDataset
 from hafnia.dataset.primitives import Classification
 from hafnia.experiment import HafniaLogger
@@ -12,6 +11,12 @@ from trainer_classification.train_utils import create_dataloaders, create_model,
 
 def parse_args():
     parser = argparse.ArgumentParser(description="PyTorch Training")
+    parser.add_argument(
+        "--project_name",
+        type=str,
+        default="Trainer ImageClassification Pytorch",
+        help="Project name for the experiment",
+    )
     parser.add_argument("--dataset", type=str, default="mnist", help="Dataset being used locally")
     parser.add_argument("--epochs", type=int, default=3, help="Number of epochs to train")
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Learning rate for optimizer")
@@ -31,7 +36,7 @@ def main(args: argparse.Namespace):
         print("CUDA is available. Training on GPU.")
     else:
         print("CUDA is not available. Training on CPU.")
-    logger = HafniaLogger()
+    logger = HafniaLogger(project_name=args.project_name)
     ckpt_dir = logger.path_model_checkpoints()  # Store checkpoints models here to make them available in the UI.
     model_dir = logger.path_model()  # Store model here to make it available in the UI.
 
