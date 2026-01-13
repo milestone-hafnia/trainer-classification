@@ -5,7 +5,7 @@ description = "Image classification trainer for the Hafnia Platform"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "hafnia>=0.4.3",
+    "hafnia>=0.5.0",
     "lark>=1.2.2",
     "pre-commit>=4.2.0",
     "pytest>=8.3.5",
@@ -22,5 +22,5 @@ dependencies = [
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
-line-length = 120 # This should match the 'line-length' in 'pyproject.toml'
-lint.select = ["C4", "E", "F","B", "I", "W", "RUF", "Q"]
+line-length = 120                                         # This should match the 'line-length' in 'pyproject.toml'
+lint.select = ["C4", "E", "F", "B", "I", "W", "RUF", "Q"]

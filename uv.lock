@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 2
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.12'",
@@ -917,7 +917,7 @@ wheels = [
 
 [[package]]
 name = "hafnia"
-version = "0.4.3"
+version = "0.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
@@ -942,9 +942,9 @@ dependencies = [
     { name = "seedir" },
     { name = "xxhash" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/26/7e/404b5eb354c3deef1ac00b395e6a4756f88453d3ed338fe7af0d6588504e/hafnia-0.4.3.tar.gz", hash = "sha256:19ff44462332e49900808e61762c132f60e16e55b6277aae13fca4f58843a632", size = 10110523, upload-time = "2025-11-20T07:27:40.044Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3e/1f/81319f1bd5520e11a317af63e206fd83934b59020238588bef57f4591697/hafnia-0.5.0.tar.gz", hash = "sha256:154b4b025e5f8f1b524b22a09af0ff59f102f8433af95a00377c424714037652", size = 10125250, upload-time = "2026-01-12T14:47:35.923Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c4/7f/eeb1365762242f37725d65a4eedc76c2ef520cd4fb13bb30eb94662b36ab/hafnia-0.4.3-py3-none-any.whl", hash = "sha256:3f9b599559da4a10fc125e0553e0e383d99888a64747a90068f5ecd81d884a50", size = 119619, upload-time = "2025-11-20T07:27:37.61Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/b5/c7c76970c6d503ba4c2a2ad6a70a017e9324f7f597f6a1f3305a9f6740e7/hafnia-0.5.0-py3-none-any.whl", hash = "sha256:b04362230d99cadd332bd3d6269b1ea463fbbf0ddedc6f6a7b868496acd489be", size = 125454, upload-time = "2026-01-12T14:47:34.38Z" },
 ]
 
 [[package]]
@@ -3383,7 +3383,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "hafnia", specifier = ">=0.4.3" },
+    { name = "hafnia", specifier = ">=0.5.0" },
     { name = "lark", specifier = ">=1.2.2" },
     { name = "pre-commit", specifier = ">=4.2.0" },
     { name = "pytest", specifier = ">=8.3.5" },
