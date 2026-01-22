@@ -17,29 +17,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/scripts/train.py",
             "args": [
-                "--dataset", "mnist",  // mnist, cifar10, cifar100, caltech-101, caltech-256
-                "--num_workers", "0",  // Set number of workers to 0 for better debugging experience
-            ],
-        },
-        {
-            "name": "Create trainer package and experiment (GPU)",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "../hafnia/src/cli/__main__.py",
-            // hafnia experiment create --dataset mnist --name classifier --trainer-path . --cmd "python scripts/train.py" --environment "Free Tier"
-            "args": [
-                "experiment",
-                "create",
-                "--dataset",
-                "mnist",
-                "--name",
-                "classifier",
-                "--trainer-path",
-                "${workspaceFolder}",
-                "--cmd",
-                "python scripts/train.py",
-                "--environment",
-                "Free Tier",
+                "--num_workers", "0", // Set number of workers to 0 for better debugging experience
             ],
         }
     ]

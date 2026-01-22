@@ -1,0 +1,69 @@
+{
+    "cmd": "python scripts/train.py",
+    "json_schema": {
+        "properties": {
+            "project_name": {
+                "default": "Trainer ImageClassification Pytorch",
+                "description": "Project name for the experiment",
+                "title": "Project Name",
+                "type": "string"
+            },
+            "epochs": {
+                "default": 3,
+                "description": "Number of epochs to train",
+                "title": "Epochs",
+                "type": "integer"
+            },
+            "learning_rate": {
+                "default": 0.001,
+                "description": "Learning rate for optimizer",
+                "title": "Learning Rate",
+                "type": "number"
+            },
+            "resize": {
+                "default": 0,
+                "description": "Resize image to specified size. Default (0), will drop resizing.",
+                "title": "Resize",
+                "type": "integer"
+            },
+            "batch_size": {
+                "default": 128,
+                "description": "Batch size for training",
+                "title": "Batch Size",
+                "type": "integer"
+            },
+            "num_workers": {
+                "default": 8,
+                "description": "Number of workers for DataLoader",
+                "title": "Num Workers",
+                "type": "integer"
+            },
+            "log_interval": {
+                "default": 5,
+                "description": "Interval for logging",
+                "title": "Log Interval",
+                "type": "integer"
+            },
+            "max_steps_per_epoch": {
+                "default": 20,
+                "description": "Max steps per epoch",
+                "title": "Max Steps Per Epoch",
+                "type": "integer"
+            },
+            "stop_early": {
+                "default": false,
+                "description": "Break script before training starts. Can be used to avoid long training times during testing.",
+                "title": "Stop Early",
+                "type": "boolean"
+            }
+        },
+        "title": "mainArgs",
+        "type": "object"
+    },
+    "n_positional_args": 0,
+    "kebab_case": true,
+    "parameter_prefix": "--",
+    "nested_parameter_separator": ".",
+    "assignment_separator": "space",
+    "bool_handling": "flag-negation"
+}

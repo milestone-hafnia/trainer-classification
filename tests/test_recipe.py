@@ -1,9 +1,17 @@
 import hashlib
 import shutil
+import subprocess
 import zipfile
 from pathlib import Path
 
+import pytest
 from hafnia import utils
+from hafnia.experiment.command_builder import (
+    CommandBuilderSchema,
+    auto_save_command_builder_schema,
+    path_of_function,
+    simulate_form_data,
+)
 from hafnia.platform.builder import validate_trainer_package_format
 
 
@@ -33,6 +41,37 @@ def compare_zip_files(zip_path1, zip_path2):
         return False
 
     return True
+
+
+def test_integration_test_placeholder():
+    from scripts.train import main
+
+    main(project_name="test_project", epochs=1)
+
+
+def test_command_builder_schema():
+    """Test that the launch schema can be saved to a file."""
+    from scripts.train import BOOL_HANDLING, main
+
+    path_function = path_of_function(main)
+    path_function_schema = path_function.with_suffix(".json")
+
+    if not path_function_schema.exists():
+        auto_save_command_builder_schema(main, bool_handling=BOOL_HANDLING)
+        pytest.fail("Launch schema file not found. Schema file have been generated. Please run the test again.")
+
+    actual_schema = CommandBuilderSchema.from_function(main, bool_handling=BOOL_HANDLING)
+    current_schema = CommandBuilderSchema.from_json_file(path_function_schema)
+
+    schema_is_up_to_date = current_schema == actual_schema
+    assert schema_is_up_to_date, (
+        f"Launch schema in '{path_function_schema}' is outdated. Please delete the schema file "
+        f"({path_function_schema}) and rerun this test to regenerate it."
+    )
+
+    form_data = simulate_form_data(main, user_args={"stop_early": "yes"})
+    cmd_args = actual_schema.command_args_from_form_data(form_data)
+    subprocess.run(cmd_args, shell=True, check=True)
 
 
 def test_trainer_zip_outdated(tmp_path: Path):
