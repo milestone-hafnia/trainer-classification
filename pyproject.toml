@@ -35,5 +35,8 @@ extend-include = ["*.ipynb"]
 line-length = 120                                         # This should match the 'line-length' in 'pyproject.toml'
 lint.select = ["C4", "E", "F", "B", "I", "W", "RUF", "Q"]
 
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
 [tool.uv.sources]
 hafnia = { git = "https://github.com/milestone-hafnia/hafnia.git", rev = "main" }

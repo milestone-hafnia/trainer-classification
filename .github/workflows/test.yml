@@ -19,5 +19,8 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Install dependencies
+        run: uv sync
+
       - name: Run tests
-        run: uv run --frozen pytest tests/ -v
+        run: uv run pytest tests/ -v
