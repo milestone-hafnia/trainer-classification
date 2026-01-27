@@ -61,9 +61,9 @@
         "type": "object"
     },
     "n_positional_args": 0,
-    "kebab_case": true,
+    "case_conversion": "kebab",
     "parameter_prefix": "--",
-    "nested_parameter_separator": ".",
+    "nested_parameter_handling": "dot",
     "assignment_separator": "space",
     "bool_handling": "flag-negation"
 }

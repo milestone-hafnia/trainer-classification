@@ -7,7 +7,7 @@ requires-python = ">=3.10"
 dependencies = [
     "cyclopts>=4.4.6",
     "docstring-parser>=0.17.0",
-    "hafnia",
+    "hafnia==0.5.2",
     "lark>=1.2.2",
     "pre-commit>=4.2.0",
     "pydantic>=2.11.10",
@@ -37,6 +37,3 @@ lint.select = ["C4", "E", "F", "B", "I", "W", "RUF", "Q"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
-
-[tool.uv.sources]
-hafnia = { git = "https://github.com/milestone-hafnia/hafnia.git", rev = "main" }
