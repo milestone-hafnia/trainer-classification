@@ -3620,7 +3620,7 @@ dependencies = [
 requires-dist = [
     { name = "cyclopts", specifier = ">=4.4.6" },
     { name = "docstring-parser", specifier = ">=0.17.0" },
-    { name = "hafnia", specifier = ">=0.5.2" },
+    { name = "hafnia", specifier = "==0.5.2" },
     { name = "lark", specifier = ">=1.2.2" },
     { name = "pre-commit", specifier = ">=4.2.0" },
     { name = "pydantic", specifier = ">=2.11.10" },
