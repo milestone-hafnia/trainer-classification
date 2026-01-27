@@ -15,9 +15,7 @@ from trainer_classification.train_utils import (
     train_loop,
 )
 
-# How boolean parameters are represented in the CLI.
-# cyclopts uses what is called 'flag-negation': 1) "flag: bool = True" --> --flag 2) "flag: bool = False" --> --no-flag
-BOOL_HANDLING = "flag-negation"
+CLI_TOOL = "cyclopts"
 
 app = App(name="train", help="PyTorch Training")
 
@@ -120,7 +118,7 @@ def main(
 
 if __name__ == "__main__":
     # Creates launch schema file for the CLI function 'main'
-    path_launch_schema = auto_save_command_builder_schema(main, bool_handling=BOOL_HANDLING)
+    path_launch_schema = auto_save_command_builder_schema(main, cli_tool=CLI_TOOL)
     user_logger.info(f"Launch schema saved to: {path_launch_schema}")
 
     app()

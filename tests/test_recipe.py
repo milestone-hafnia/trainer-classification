@@ -51,16 +51,16 @@ def test_integration_test_placeholder():
 
 def test_command_builder_schema():
     """Test that the launch schema can be saved to a file."""
-    from scripts.train import BOOL_HANDLING, main
+    from scripts.train import CLI_TOOL, main
 
     path_function = path_of_function(main)
     path_function_schema = path_function.with_suffix(".json")
 
     if not path_function_schema.exists():
-        auto_save_command_builder_schema(main, bool_handling=BOOL_HANDLING)
+        auto_save_command_builder_schema(main, cli_tool=CLI_TOOL)
         pytest.fail("Launch schema file not found. Schema file have been generated. Please run the test again.")
 
-    actual_schema = CommandBuilderSchema.from_function(main, bool_handling=BOOL_HANDLING)
+    actual_schema = CommandBuilderSchema.from_function(main, cli_tool=CLI_TOOL)
     current_schema = CommandBuilderSchema.from_json_file(path_function_schema)
 
     schema_is_up_to_date = current_schema == actual_schema
