@@ -54,7 +54,7 @@ def test_command_builder_schema():
     from scripts.train import CLI_TOOL, main
 
     path_function = path_of_function(main)
-    path_function_schema = path_function.with_suffix(".json")
+    path_function_schema = path_function.with_suffix(".schema.json")
 
     if not path_function_schema.exists():
         auto_save_command_builder_schema(main, cli_tool=CLI_TOOL)

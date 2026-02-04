@@ -2,7 +2,7 @@ from typing import Dict, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
-from hafnia import torch_helpers
+from hafnia.dataset import torch_helpers
 from hafnia.dataset.hafnia_dataset import HafniaDataset
 from hafnia.dataset.hafnia_dataset_types import TaskInfo
 from hafnia.experiment import HafniaLogger
