@@ -19,7 +19,6 @@ tests/
 
 # Hafnia files
 trainer.zip
-README.md
 state.json
 
 excluded_files/

@@ -3628,7 +3628,7 @@ wheels = [
 [[package]]
 name = "trainer-classification"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "cyclopts" },
     { name = "docstring-parser" },
