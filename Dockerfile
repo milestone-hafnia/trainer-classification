@@ -14,8 +14,8 @@ ENV PATH="/root/.local/bin/:$PATH"
 ENV TRAINER_PACKAGE_DIR=/opt/recipe
 WORKDIR $TRAINER_PACKAGE_DIR
 
-# Copy only dependency files first for caching
-COPY pyproject.toml uv.lock .python-version ./
+# Copy only dependency files first for caching. 'README.md' is required when install environment
+COPY pyproject.toml uv.lock .python-version README.md ./
 
 # Install dependencies (cached if deps didn't change)
 RUN uv sync --no-cache --locked

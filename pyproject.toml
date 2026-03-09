@@ -19,9 +19,9 @@ dependencies = [
     "torch>=2.6.0",
     "torchmetrics>=1.7.0",
     "torchvision>=0.24.0",
-    "opencv-python-headless>4.13", # Issues in 4.13.0.90" for small images
+    "opencv-python-headless<4.13", # Issues in 4.13.0.90" for small docker images
     "tqdm>=4.67.1",
-    "hafnia==0.5.4",
+    "hafnia>=0.6.1",
 ]
 
 # Adding hafnia:
