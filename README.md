@@ -213,6 +213,7 @@ upload a trainer package through the portal.
 Instead you can use the CLI Command `hafnia experiment create` to automatically
 zip and upload the trainer package to the Training-aaS platform.
 
+```bash
     # See your options for creating an experiment
     hafnia experiment create --help
 
@@ -222,6 +223,7 @@ zip and upload the trainer package to the Training-aaS platform.
 
     # Showing default options
     hafnia experiment create --dataset mnist --trainer-path . --cmd "python scripts/train.py" --environment "Free Tier"
+```
 
 This command will create a trainer called `classifier` using the current working directory `.`.  
 The training command is `python scripts/train.py`. The model is then trained on the `mnist` dataset
