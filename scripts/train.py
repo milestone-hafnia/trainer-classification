@@ -91,7 +91,7 @@ def main(
         num_workers=num_workers,
     )
 
-    num_classes = len(classification_task.class_names)
+    num_classes = len(classification_task.get_class_names())
     model = create_model(num_classes=num_classes)
 
     if stop_early:
