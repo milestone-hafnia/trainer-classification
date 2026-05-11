@@ -1,4 +1,5 @@
 {
+    "name": "scripts/train.py",
     "cmd": "python scripts/train.py",
     "json_schema": {
         "properties": {
