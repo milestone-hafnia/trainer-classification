@@ -1,0 +1,48 @@
+{
+    "name": "scripts/export_onnx.py",
+    "cmd": "python scripts/export_onnx.py",
+    "json_schema": {
+        "description": "Export a classification model archive to ONNX format.\n\nLoads the model from the compressed archive pointed to by ``model_path`` (or a user-selected\ncheckpoint when one is available) and exports it to ONNX via ``torch.onnx.export``. The\nresulting ``.onnx`` file is written to the experiment checkpoints folder and copied to the\nmodel folder so it is collected as a model artifact on the Hafnia platform.\n\n``opset_version`` selects the ONNX opset, ``batch_size`` bakes a static batch dimension into\nthe graph (use ``dynamic_batch`` for a variable batch dimension instead). The input resolution\nis taken from the model archive's ``image_size`` so it matches training.",
+        "properties": {
+            "model_path": {
+                "default": "./pretrained_models/resnet18.zip",
+                "description": "Path to the model archive (.zip) to export. Note: this is ignored when a checkpoint is available (e.g. a checkpoint selected for the experiment on the Hafnia platform) - the checkpoint is exported instead of this model.",
+                "title": "Model Path",
+                "type": "string"
+            },
+            "opset_version": {
+                "default": 17,
+                "description": "ONNX opset version to target",
+                "title": "Opset Version",
+                "type": "integer"
+            },
+            "batch_size": {
+                "default": 1,
+                "description": "Static batch size baked into the ONNX graph",
+                "title": "Batch Size",
+                "type": "integer"
+            },
+            "dynamic_batch": {
+                "default": false,
+                "description": "Export with a dynamic batch dimension so the model accepts variable batch sizes at runtime",
+                "title": "Dynamic Batch",
+                "type": "boolean"
+            },
+            "verbose": {
+                "default": true,
+                "description": "Print export progress information",
+                "title": "Verbose",
+                "type": "boolean"
+            }
+        },
+        "title": "mainArgs",
+        "type": "object",
+        "positional_args": []
+    },
+    "case_conversion": "kebab",
+    "parameter_prefix": "--",
+    "nested_parameter_handling": "dot",
+    "assignment_separator": "space",
+    "bool_handling": "flag-negation",
+    "order": 100
+}

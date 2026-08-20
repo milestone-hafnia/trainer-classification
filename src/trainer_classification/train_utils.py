@@ -1,3 +1,5 @@
+import tempfile
+from pathlib import Path
 from typing import Dict, Optional, Tuple, Union
 
 import torch
@@ -8,8 +10,9 @@ from hafnia.dataset.hafnia_dataset_types import TaskInfo
 from hafnia.experiment import HafniaLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, Metric
-from torchvision.models import resnet18
 from torchvision.transforms import v2
+
+from trainer_classification.wrapped_model import DEFAULT_MODEL_NAME, ModelConfig, model_from_name
 
 
 def create_transforms(resize: Optional[int] = None) -> v2.Compose:
@@ -69,19 +72,18 @@ def create_dataloaders(
     return train_loader, test_loader
 
 
-def create_model(num_classes: int) -> nn.Module:
+def create_model(num_classes: int, pretrained: bool = False) -> nn.Module:
     """
-    Creates and returns a ResNet18 model adjusted for the specified number of classes.
+    Creates and returns the default classification model adjusted for the specified number of classes.
 
     Args:
         num_classes (int): Number of output classes.
+        pretrained (bool): Initialize the backbone from ImageNet weights.
 
     Returns:
-        nn.Module: The modified ResNet18 model.
+        nn.Module: The classification model with its head sized to ``num_classes``.
     """
-    model = resnet18(weights=None)
-    model.fc = nn.Linear(model.fc.in_features, num_classes)
-    return model
+    return model_from_name(DEFAULT_MODEL_NAME, num_classes=num_classes, pretrained=pretrained)
 
 
 def run_train_epoch(
@@ -225,9 +227,10 @@ def train_loop(
     learning_rate: float,
     epochs: int,
     log_interval: int,
-    ckpt_dir: str,
     max_steps_per_epoch: int,
     num_classes: int,
+    model_name: str,
+    image_size: int,
 ):
     """
     Main training loop.
@@ -241,9 +244,17 @@ def train_loop(
         learning_rate (float): Learning rate for the optimizer.
         epochs (int): Number of epochs to train.
         log_interval (int): Interval for logging metrics.
-        ckpt_dir (str): Directory to save checkpoints.
         max_steps_per_epoch (int): Maximum steps per epoch.
+        num_classes (int): Number of classes in the classification task.
+        model_name (str): Architecture name stored in the saved model archives (e.g. 'resnet18').
+        image_size (int): Inference image size stored in the saved model archives.
     """
+    # Each epoch checkpoint is stored - as a single compressed model archive (weights + config) - in
+    # both the model and checkpoints folders, so the platform collects them as model artifacts and
+    # resumable checkpoints.
+    model_dir = logger.path_model()
+    ckpt_dir = logger.path_model_checkpoints()
+
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
     criterion = nn.CrossEntropyLoss()
@@ -277,5 +288,41 @@ def train_loop(
             device=device,
             ml_logger=logger,
         )
-        ckpt_fname = f"accuracy_{eval_metrics['accuracy']:.2f}_epoch_{epoch}.pth"
-        torch.save(model.state_dict(), f"{ckpt_dir}/{ckpt_fname}")
+        ckpt_stem = f"accuracy_{eval_metrics['accuracy']:.2f}_epoch_{epoch}"
+        save_model_archive(
+            model=model,
+            model_name=model_name,
+            classification_task=classification_task,
+            image_size=image_size,
+            stem=ckpt_stem,
+            model_dir=model_dir,
+            ckpt_dir=ckpt_dir,
+        )
+
+
+def save_model_archive(
+    model: nn.Module,
+    model_name: str,
+    classification_task: TaskInfo,
+    image_size: int,
+    stem: str,
+    model_dir: Path,
+    ckpt_dir: Path,
+) -> None:
+    """Save ``model`` as a single compressed model archive (weights + config) to both folders.
+
+    The archive bundles the model weights with a serialized ``ModelConfig`` so it can be loaded back
+    for benchmarking, ONNX export, or as a resume point. It is written to ``model_dir`` (collected as
+    a model artifact) and ``ckpt_dir`` (discovered as a resumable checkpoint).
+    """
+    with tempfile.TemporaryDirectory(prefix="trainer_ckpt_") as tmp_dir:
+        weights_path = Path(tmp_dir) / f"{stem}.pth"
+        torch.save(model.state_dict(), weights_path)
+        archive_config = ModelConfig(
+            name=model_name,
+            task=classification_task,
+            model_weight_path=str(weights_path),
+            image_size=image_size,
+        )
+        archive_config.save_model(model_dir / f"{stem}.zip")
+        archive_config.save_model(ckpt_dir / f"{stem}.zip")

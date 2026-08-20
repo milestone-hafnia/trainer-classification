@@ -2,12 +2,25 @@
     "name": "scripts/train.py",
     "cmd": "python scripts/train.py",
     "json_schema": {
+        "description": "Train an image-classification model on a Hafnia dataset.\n\nLoads the dataset (the hidden dataset when running on the Hafnia platform, otherwise a public\nsample dataset), initializes a model from the compressed model archive pointed to by\n``model_path`` (optionally using its pretrained weights), and runs the training loop.\n\nDuring training, each epoch checkpoint is stored as a standalone compressed Hafnia model\narchive (weights + serialized model config bundled into a single ``.zip``) under both the\nexperiment model and checkpoints folders, so they can be used downstream for benchmarking,\nONNX export, or as a resume point. When a checkpoint is selected for the experiment on the\nplatform, training resumes from it instead of ``model_path``.",
         "properties": {
             "project_name": {
                 "default": "Trainer ImageClassification Pytorch",
                 "description": "Project name for the experiment",
                 "title": "Project Name",
                 "type": "string"
+            },
+            "model_path": {
+                "default": "./pretrained_models/resnet18.zip",
+                "description": "Path to a compressed (zip) pretrained model used as the training starting point. Note: this is ignored when a checkpoint is available (e.g. a checkpoint selected for the experiment on the Hafnia platform) - training resumes from the checkpoint instead (and '--pretrained' is forced to True).",
+                "title": "Model Path",
+                "type": "string"
+            },
+            "pretrained": {
+                "default": true,
+                "description": "Initialize the model from the pretrained weights in 'model_path'",
+                "title": "Pretrained",
+                "type": "boolean"
             },
             "epochs": {
                 "default": 3,
@@ -59,12 +72,13 @@
             }
         },
         "title": "mainArgs",
-        "type": "object"
+        "type": "object",
+        "positional_args": []
     },
-    "n_positional_args": 0,
     "case_conversion": "kebab",
     "parameter_prefix": "--",
     "nested_parameter_handling": "dot",
     "assignment_separator": "space",
-    "bool_handling": "flag-negation"
+    "bool_handling": "flag-negation",
+    "order": 0
 }

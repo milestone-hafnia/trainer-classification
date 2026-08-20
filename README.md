@@ -119,6 +119,36 @@ The trainer package code should follow below structure.
   be referenced in both the docker container and in your local virtual environment, to ensure you have
   consistent dependencies locally and in the training service.
 
+#### Trainer Package: Scripts and Model Archives
+
+The [`scripts/`](scripts/) folder contains the entry points. `train.py` is the primary script; the
+others are optional helpers for benchmarking, exporting, and maintaining the model cache. Use
+`--help` on any script to see its options.
+
+- **[`train.py`](scripts/train.py)** - Main training script. Loads the dataset, initializes a model
+  from the compressed archive in `--model-path` (defaults to `pretrained_models/resnet18.zip` with
+  pretrained ImageNet weights), trains, and writes every epoch checkpoint as a single compressed
+  model archive (`.zip`) to both the model and checkpoints folders. When a checkpoint is selected
+  for the experiment on the platform, training resumes from it instead. This is the script invoked
+  by the default training command `python scripts/train.py`.
+- **[`benchmark.py`](scripts/benchmark.py)** - Runs a trained or pretrained model archive on a
+  dataset split. When the split has ground-truth annotations, classification metrics (accuracy,
+  per-class precision/recall/F1) are computed and logged; otherwise the metric step is skipped and
+  the script acts as a pure inference pass.
+- **[`export_onnx.py`](scripts/export_onnx.py)** - Exports a model archive to a single
+  self-contained `.onnx` file via `torch.onnx.export`, written to both the experiment model and
+  checkpoints folders. Options: `--opset-version`, `--batch-size`, `--dynamic-batch`.
+- **[`create_pretrained_model.py`](scripts/create_pretrained_model.py)** - Maintenance utility that
+  downloads the torchvision ImageNet weights and writes them, together with a serialized model
+  config, into `pretrained_models/resnet18.zip`. Run once after cloning (the archive is tracked
+  with git-LFS) to populate the local pretrained-model cache the other scripts load from.
+
+A **model archive** is a single `.zip` bundling `model_config.json` (architecture name, the dataset
+task with its class names, and the inference image size) together with the weights `.pth`. The same
+archive format is used for pretrained models, epoch checkpoints, and the inputs to benchmarking and
+ONNX export. See [`src/trainer_classification/wrapped_model.py`](src/trainer_classification/wrapped_model.py)
+for `InitModelConfig` (save/load) and `WrappedModel` (the inference model used for benchmarking).
+
 #### Trainer Package: HafniaLogger
 
 The `HafniaLogger` is used for experiment tracking and is responsible for logging configuration, training and
