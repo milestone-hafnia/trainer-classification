@@ -1,0 +1,82 @@
+{
+    "name": "scripts/benchmark.py",
+    "cmd": "python scripts/benchmark.py",
+    "json_schema": {
+        "$defs": {
+            "InferenceConfig": {
+                "properties": {
+                    "compile": {
+                        "default": false,
+                        "title": "Compile",
+                        "type": "boolean"
+                    },
+                    "batch_size": {
+                        "default": 1,
+                        "title": "Batch Size",
+                        "type": "integer"
+                    }
+                },
+                "title": "InferenceConfig",
+                "type": "object"
+            }
+        },
+        "description": "Run a model on a Hafnia dataset split and compute classification metrics when ground truth is available.\n\nLoads the dataset (the hidden dataset when running on the Hafnia platform, otherwise a public\nsample dataset), runs the model on the requested split, and - when the split has ground-truth\nannotations - computes classification metrics and logs them through ``HafniaLogger``. When the\nsplit has no ground truth the metric step is skipped, so the same script can also be used as a\npure inference pass. When ``save_annotations`` is set (default), the dataset with predictions\nappended as a new prediction task on each sample is written - annotations only, no image data -\nto the experiment artifacts folder for downstream analysis or visualization.",
+        "properties": {
+            "model_path": {
+                "default": "./pretrained_models/resnet18.zip",
+                "description": "Path to the trained model archive (.zip). Note: this is ignored when a checkpoint is available (e.g. a checkpoint selected for the experiment on the Hafnia platform) - the checkpoint is benchmarked instead of this model.",
+                "title": "Model Path",
+                "type": "string"
+            },
+            "inference": {
+                "anyOf": [
+                    {
+                        "$ref": "#/$defs/InferenceConfig"
+                    },
+                    {
+                        "type": "null",
+                        "title": "Select None"
+                    }
+                ],
+                "default": null,
+                "description": "Inference configuration for the model"
+            },
+            "split_name": {
+                "default": "test",
+                "description": "Dataset split to run on",
+                "title": "Split Name",
+                "type": "string"
+            },
+            "save_annotations": {
+                "default": true,
+                "description": "Write the predictions (annotations only, no image data) to the experiment artifacts folder.",
+                "title": "Save Annotations",
+                "type": "boolean"
+            },
+            "samples": {
+                "anyOf": [
+                    {
+                        "type": "integer",
+                        "title": "Select 'Integer'"
+                    },
+                    {
+                        "type": "null",
+                        "title": "Select None"
+                    }
+                ],
+                "default": null,
+                "description": "Limit the number of samples to run on. Useful for faster testing.",
+                "title": "Samples"
+            }
+        },
+        "title": "mainArgs",
+        "type": "object",
+        "positional_args": []
+    },
+    "case_conversion": "kebab",
+    "parameter_prefix": "--",
+    "nested_parameter_handling": "dot",
+    "assignment_separator": "space",
+    "bool_handling": "flag-negation",
+    "order": 100
+}

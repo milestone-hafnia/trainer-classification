@@ -11,6 +11,7 @@
     "notebook.source.fixAll": "explicit",
     "notebook.source.organizeImports": "explicit"
   },
+  "python.languageServer": "Pylance",
   "[python]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
@@ -20,7 +21,7 @@
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
   "json.format.keepLines": true,
-  "autoDocstring.docstringFormat": "google-notypes",
+
   "python.testing.pytestArgs": [
     "tests",
     "-vv",

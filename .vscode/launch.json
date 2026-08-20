@@ -19,6 +19,15 @@
             "args": [
                 "--num_workers", "0", // Set number of workers to 0 for better debugging experience
             ],
+        },
+        {
+            "name": "Model Benchmarking",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/benchmark.py",
+            "args": [
+
+            ],
         }
     ]
 }
