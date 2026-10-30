@@ -13,6 +13,7 @@
 **.egg-info/
 
 __pycache__
+wandb
 dist/
 tests/
 .github/
@@ -20,5 +21,4 @@ tests/
 # Hafnia files
 trainer.zip
 state.json
-
 excluded_files/
